@@ -276,10 +276,10 @@
                 $("#all_consented_clients").html(data.all_consented_clients);
                 $("#all_future_appointments").html(data.all_future_appointments);
                 $("#number_of_facilities").html(data.number_of_facilities);
-                $("#mainGraph").html(data.consented_clients_count);
-                $("#mainGraph").html(data.registered_clients_count);
-                //data.registered_clients_count;
-                data.consented_clients_count;
+                chartData(data.consented_clients_count);
+                chartData(data.registered_clients_count);
+                //data.consented_clients_count;
+                //data.registered_clients_count;chartData
             }
         });
     });
@@ -339,6 +339,7 @@
         }],
 
     });
+
 
 
     var colors = Highcharts.getOptions().colors;

@@ -20,7 +20,9 @@ class ReportController extends Controller
 {
     public function deactivated_clients()
     {
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $all_deactivated_clients = Client::join('tbl_groups', 'tbl_groups.id', 'tbl_client.group_id')
                 ->select('tbl_client.clinic_number', 'tbl_client.file_no', DB::raw("CONCAT(`tbl_client`.`f_name`, ' ', `tbl_client`.`m_name`, ' ', `tbl_client`.`l_name`) as full_name"), 'tbl_client.phone_no', 'tbl_client.dob', 'tbl_client.client_type', 'tbl_groups.name', 'tbl_client.created_at')
                 ->where('tbl_client.status', '=', 'Disabled')
@@ -36,6 +38,9 @@ class ReportController extends Controller
         }
 
         if (Auth::user()->access_level == 'Partner') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->where('id', Auth::user()->partner_id)
+            ->pluck('name', 'id');
             $all_deactivated_clients = Client::join('tbl_groups', 'tbl_groups.id', 'tbl_client.group_id')
                 ->select('tbl_client.clinic_number', 'tbl_client.file_no', DB::raw("CONCAT(`tbl_client`.`f_name`, ' ', `tbl_client`.`m_name`, ' ', `tbl_client`.`l_name`) as full_name"), 'tbl_client.phone_no', 'tbl_client.dob', 'tbl_client.client_type', 'tbl_groups.name', 'tbl_client.created_at')
                 ->where('tbl_client.status', '=', 'Disabled')
@@ -43,12 +48,14 @@ class ReportController extends Controller
                 ->get();
         }
 
-        return view('reports.deactivated_clients', compact('all_deactivated_clients'));
+        return view('reports.deactivated_clients', compact('all_deactivated_clients', 'all_partners'));
     }
 
     public function transfer_out()
     {
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $all_transfer_clients = Client::join('tbl_groups', 'tbl_groups.id', 'tbl_client.group_id')
                 ->join('tbl_master_facility', 'tbl_master_facility.code', '=', 'tbl_client.prev_clinic')
                 ->select('tbl_client.clinic_number', 'tbl_client.file_no', DB::raw("CONCAT(`tbl_client`.`f_name`, ' ', `tbl_client`.`m_name`, ' ', `tbl_client`.`l_name`) as full_name"), DB::raw("CONCAT(`tbl_client`.`prev_clinic`, ' ', `tbl_master_facility`.`name`) as clinic_previous"), 'tbl_client.phone_no', 'tbl_client.dob', 'tbl_client.client_status', 'tbl_groups.name', 'tbl_client.created_at')
@@ -79,6 +86,9 @@ class ReportController extends Controller
         }
 
         if (Auth::user()->access_level == 'Partner') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->where('id', Auth::user()->partner_id)
+            ->pluck('name', 'id');
             $all_transfer_clients = Client::join('tbl_groups', 'tbl_groups.id', 'tbl_client.group_id')
                 ->join('tbl_master_facility', 'tbl_master_facility.code', '=', 'tbl_client.prev_clinic')
                 ->select('tbl_client.clinic_number', 'tbl_client.file_no', DB::raw("CONCAT(`tbl_client`.`f_name`, ' ', `tbl_client`.`m_name`, ' ', `tbl_client`.`l_name`) as full_name"), DB::raw("CONCAT(`tbl_client`.`prev_clinic`, ' ', `tbl_master_facility`.`name`) as clinic_previous"), 'tbl_client.phone_no', 'tbl_client.dob', 'tbl_client.client_status', 'tbl_groups.name', 'tbl_client.created_at')
@@ -95,12 +105,14 @@ class ReportController extends Controller
         }
 
 
-        return view('reports.transfer_out_clients', compact('all_transfer_clients', 'all_transfer_in'));
+        return view('reports.transfer_out_clients', compact('all_transfer_clients', 'all_transfer_in', 'all_partners'));
     }
 
     public function today_appointments()
     {
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $all_today_appointments = TodayAppointment::select('clinic_no', 'client_name', 'file_no', 'client_phone_no', 'appointment_type', 'appntmnt_date')
                 ->get();
         }
@@ -111,11 +123,13 @@ class ReportController extends Controller
                 ->get();
         }
 
-        return view('reports.today_appointment', compact('all_today_appointments'));
+        return view('reports.today_appointment', compact('all_today_appointments', 'all_partners'));
     }
     public function consented_report()
     {
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $consented_clients = Client::join('tbl_groups', 'tbl_groups.id', 'tbl_client.group_id')
                 ->select('tbl_client.clinic_number', 'tbl_client.file_no', DB::raw("CONCAT(`tbl_client`.`f_name`, ' ', `tbl_client`.`m_name`, ' ', `tbl_client`.`l_name`) as full_name"), 'tbl_client.phone_no', 'tbl_client.dob', 'tbl_client.client_status', 'tbl_groups.name', 'tbl_client.created_at', 'tbl_client.smsenable', 'tbl_client.enrollment_date', 'tbl_client.art_date', 'tbl_client.updated_at', 'tbl_client.status', 'tbl_client.consent_date')
                 ->where('tbl_client.smsenable', '=', 'Yes')
@@ -131,6 +145,8 @@ class ReportController extends Controller
         }
 
         if (Auth::user()->access_level == 'Partner') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $consented_clients = Client::join('tbl_groups', 'tbl_groups.id', 'tbl_client.group_id')
                 ->join('tbl_master_facility', 'tbl_master_facility.code', '=', 'tbl_client.prev_clinic')
                 ->select('tbl_client.clinic_number', 'tbl_client.file_no', DB::raw("CONCAT(`tbl_client`.`f_name`, ' ', `tbl_client`.`m_name`, ' ', `tbl_client`.`l_name`) as full_name"), DB::raw("CONCAT(`tbl_client`.`prev_clinic`, ' ', `tbl_master_facility`.`name`) as clinic_previous"), 'tbl_client.phone_no', 'tbl_client.dob', 'tbl_client.client_status', 'tbl_groups.name', 'tbl_client.created_at', 'tbl_client.smsenable', 'tbl_client.enrollment_date', 'tbl_client.art_date', 'tbl_client.updated_at', 'tbl_client.status', 'tbl_client.consent_date')
@@ -139,12 +155,14 @@ class ReportController extends Controller
                 ->get();
         }
 
-        return view('reports.consented', compact('consented_clients'));
+        return view('reports.consented', compact('consented_clients', 'all_partners'));
     }
 
     public function tracing_outcome()
     {
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $outcome_report = OutcomeReport::select(
                 'UPN',
                 'Age',
@@ -185,12 +203,14 @@ class ReportController extends Controller
         }
 
 
-        return view('reports.outcome', compact('outcome_report'));
+        return view('reports.outcome', compact('outcome_report', 'all_partners'));
     }
 
     public function messages_extract_report()
     {
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $message_extract = MessageExtract::select(
                 'clinic_number',
                 'gender',
@@ -230,6 +250,9 @@ class ReportController extends Controller
                 ->get();
         }
         if (Auth::user()->access_level == 'Partner') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->where('id', Auth::user()->partner_id)
+            ->pluck('name', 'id');
             $message_extract = MessageExtract::select(
                 'clinic_number',
                 'gender',
@@ -250,7 +273,7 @@ class ReportController extends Controller
                 ->get();
         }
 
-        return view('reports.message_extract', compact('message_extract'));
+        return view('reports.message_extract', compact('message_extract', 'all_partners'));
     }
 
     public function access_report()
@@ -262,7 +285,9 @@ class ReportController extends Controller
 
     public function client_report()
     {
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $client_summary = Summary::all();
         }
 
@@ -272,16 +297,22 @@ class ReportController extends Controller
         }
 
         if (Auth::user()->access_level == 'Partner') {
+
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->where('id', Auth::user()->partner_id)
+            ->pluck('name', 'id');
             $client_summary = Summary::all()
                 ->where('partner_id', Auth::user()->partner_id);
         }
 
-        return view('reports.client_summary', compact('client_summary'));
+        return view('reports.client_summary', compact('client_summary', 'all_partners'));
     }
 
     public function monthly_appointments()
     {
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $monthly_app_summary = MonthlyApp::all();
         }
 
@@ -291,11 +322,13 @@ class ReportController extends Controller
         }
 
         if (Auth::user()->access_level == 'Partner') {
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->where('id', Auth::user()->partner_id)
+            ->pluck('name', 'id');
             $monthly_app_summary = MonthlyApp::all()
                 ->where('partner_id', Auth::user()->partner_id);
         }
 
-        $all_partners = Partner::all();
 
         return view('reports.monthly_appointment', compact('monthly_app_summary', 'all_partners'));
     }

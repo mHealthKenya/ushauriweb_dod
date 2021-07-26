@@ -80,7 +80,7 @@
 
                             <li class="item-name">
                                 <a href="{{route('consent-clients')}}">
-                                    <span class="item-name">Client Consent</span>
+                                    <span class="item-name">Non Consented</span>
                                 </a>
                             </li>
 

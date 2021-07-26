@@ -30,7 +30,9 @@
                 <div class="form-group">
                     <select class="form-control county  input-rounded input-sm select2" id="counties" name="county">
                         <option value="">Please select County:</option>
+                        <option></option>
                         <option value=""></option>
+
                     </select>
                 </div>
             </div>
@@ -121,7 +123,7 @@
                 <div class="content">
                     <a class="has-arrow" href="{{route('Reports-il-partners')}}">
                         <p class="text-muted mt-2 mb-0">Partners</p>
-                        <p id="il_partners" class="text-primary text-20 line-height-1 mb-2">{{count($il_partners)}}</p>
+                        <p id="il_partners" class="text-primary text-20 line-height-1 mb-2">{{$il_partners}}</p>
                     </a>
                 </div>
             </div>

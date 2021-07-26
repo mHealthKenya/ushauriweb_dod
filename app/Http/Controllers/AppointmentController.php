@@ -732,36 +732,36 @@ class AppointmentController extends Controller
 
             // appointments count
             $created_appointmnent_count = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
-                ->select(\DB::raw("COUNT(tbl_appointment.id) as count"))
+                ->select(\DB::raw("tbl_appointment.id as count"))
                 ->whereNotNull('tbl_appointment.id')
-                ->pluck('count');
+                ->count();
 
             $kept_appointmnent_count = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
-                ->select(\DB::raw("COUNT(tbl_appointment.id) as count"))
+                ->select(\DB::raw("tbl_appointment.id as count"))
                 ->whereNotNull('tbl_appointment.id')
                 ->where('tbl_appointment.appointment_kept', '=', 'Yes')
-                ->pluck('count');
+                ->count();
 
             $defaulted_appointmnent_count = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
-                ->select(\DB::raw("COUNT(tbl_appointment.id) as count"))
+                ->select(\DB::raw("tbl_appointment.id as count"))
                 ->whereNotNull('tbl_appointment.id')
                 ->where('tbl_appointment.active_app', '=', 1)
                 ->where('tbl_appointment.app_status', '=', 'Defaulted')
-                ->pluck('count');
+                ->count();
 
             $missed_appointmnent_count = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
-                ->select(\DB::raw("COUNT(tbl_appointment.id) as count"))
+                ->select(\DB::raw("tbl_appointment.id as count"))
                 ->whereNotNull('tbl_appointment.id')
                 ->where('tbl_appointment.active_app', '=', 1)
                 ->where('tbl_appointment.app_status', '=', 'Missed')
-                ->pluck('count');
+                ->count();
 
             $ltfu_appointmnent_count = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
-                ->select(\DB::raw("COUNT(tbl_appointment.id) as count"))
+                ->select(\DB::raw("tbl_appointment.id as count"))
                 ->whereNotNull('tbl_appointment.id')
                 ->where('tbl_appointment.active_app', '=', 1)
                 ->where('tbl_appointment.app_status', '=', 'LTFU')
-                ->pluck('count');
+                ->count();
 
 
             // single active appointment

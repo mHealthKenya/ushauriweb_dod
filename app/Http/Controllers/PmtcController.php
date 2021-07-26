@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use\App\Models\Pmtct;
 use\App\Models\Client;
+use\App\Models\Partner;
 use\App\Models\Appointments;
 use Carbon\Carbon;
 use Auth;
@@ -1120,6 +1121,9 @@ class PmtcController extends Controller
 
         if (Auth::user()->access_level == 'Partner') {
 
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->where('id', Auth::user()->partner_id)
+            ->pluck('name', 'id');
 
                 $tonine_scheduled = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
                 ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
@@ -1770,9 +1774,10 @@ class PmtcController extends Controller
 
             // Administrator
 
-        if (Auth::user()->access_level == 'Admin') {
+        if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
 
-
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
             $tonine_scheduled = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
             ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
              ->select(\DB::raw("count((case when (((year(curdate()) - year(`tbl_client`.`dob`)) > 0) and ((year(curdate()) - year(`tbl_client`.`dob`)) <= 9)) then `tbl_client`.`id` end)) AS count"))
@@ -2353,7 +2358,7 @@ class PmtcController extends Controller
             ->pluck('count');
         }
 
-        return view('pmtct/pmtct_dashboard', compact('tonine_scheduled', 'tofourteen_scheduled', 'tonineteen_scheduled', 'totwentyfour_scheduled',
+        return view('pmtct/pmtct_dashboard', compact('all_partners', 'tonine_scheduled', 'tofourteen_scheduled', 'tonineteen_scheduled', 'totwentyfour_scheduled',
     'totwentynine_scheduled', 'tothirtyfour_scheduled', 'tothirtynine_scheduled', 'tofortyfour_scheduled', 'tofortynine_scheduled', 'tofiftyplus_scheduled', 'tototal_scheduled',
     'tonine_unscheduled', 'tofourteen_unscheduled', 'tonineteen_unscheduled', 'totwentyfour_unscheduled', 'totwentynine_unscheduled', 'tothirtyfour_unscheduled', 'tothirtynine_unscheduled',
     'tofortyfour_unscheduled', 'tofortynine_unscheduled', 'tofifty_unscheduled', 'tototal_unscheduled', 'tonine_booked', 'tofourteen_booked', 'tonineteen_booked', 'totwentyfour_booked',
@@ -2370,7 +2375,10 @@ class PmtcController extends Controller
 
     public function hei_dashboard()
 {
-    if (Auth::user()->access_level == 'Admin') {
+    if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Donor') {
+
+        $all_partners = Partner::where('status', '=', 'Active')
+            ->pluck('name', 'id');
         $toone_booked_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
         ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
         ->select(\DB::raw("count((case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) < 1)) then `tbl_pmtct`.`id` end)) AS count"))
@@ -3043,6 +3051,10 @@ class PmtcController extends Controller
     }
 
     if (Auth::user()->access_level == 'Partner') {
+
+            $all_partners = Partner::where('status', '=', 'Active')
+            ->where('id', Auth::user()->partner_id)
+            ->pluck('name', 'id');
         $toone_booked_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
         ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
         ->select(\DB::raw("count((case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) < 1)) then `tbl_pmtct`.`id` end)) AS count"))
@@ -3393,7 +3405,7 @@ class PmtcController extends Controller
 
     }
 
-    return view('pmtct/hei_dashboard', compact('toone_booked_heis', 'tofour_booked_heis', 'tonine_booked_heis', 'tofourteen_booked_heis',
+    return view('pmtct/hei_dashboard', compact('all_partners', 'toone_booked_heis', 'tofour_booked_heis', 'tonine_booked_heis', 'tofourteen_booked_heis',
     'toone_scheduled_heis', 'tofour_scheduled_heis', 'tonine_scheduled_heis', 'tofourteen_scheduled_heis', 'toone_unscheduled_heis', 'tofour_unscheduled_heis',
     'tonine_unscheduled_heis', 'tofourteen_unscheduled_heis', 'toone_missed_heis', 'tofour_missed_heis', 'tonine_missed_heis', 'tofourteen_missed_heis',
     'toone_defaulted_heis', 'tofour_defaulted_heis', 'tonine_defaulted_heis', 'tofourteen_defaulted_heis', 'toone_ltfu_heis', 'tofour_ltfu_heis', 'tonine_ltfu_heis', 'tofourteen_ltfu_heis',
@@ -3401,4 +3413,550 @@ class PmtcController extends Controller
     'count_unscheduled_heis', 'count_deceased_heis', 'count_transfer_heis', 'count_discharged_heis', 'count_missed_heis', 'count_defaulted_heis', 'count_ltfu_heis', 'count_pcr_heis'));
 
 }
+
+    public function filter_hei_dashboard(Request $request)
+{
+    $data                = [];
+
+        $selected_counties = $request->partners;
+        $selected_counties = $request->counties;
+        $selected_subcounties = $request->subcounties;
+        $selected_facilites = $request->facilities;
+
+        $toone_booked_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) < 1)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Booked')
+        ->where('tbl_appointment.active_app', '=', 1)
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofour_booked_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 1) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 4)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Booked')
+        ->where('tbl_appointment.active_app', '=', 1)
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tonine_booked_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 5) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 9)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Booked')
+        ->where('tbl_appointment.active_app', '=', 1)
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofourteen_booked_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 10) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Booked')
+        ->where('tbl_appointment.active_app', '=', 1)
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tototal_booked_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Booked')
+        ->where('tbl_appointment.active_app', '=', 1)
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $toone_scheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) < 1)) then `tbl_pmtct`.`id` end"))
+       // ->where('tbl_appointment.visit_type', '=', 'Scheduled')
+        ->whereNotNull('tbl_client.hei_no')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofour_scheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 1) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 4)) then `tbl_pmtct`.`id` end"))
+       // ->where('tbl_appointment.visit_type', '=', 'Scheduled')
+        ->whereNotNull('tbl_client.hei_no')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tonine_scheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 5) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 9)) then `tbl_pmtct`.`id` end"))
+        //->where('tbl_appointment.visit_type', '=', 'Scheduled')
+        ->whereNotNull('tbl_client.hei_no')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofourteen_scheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 10) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        //->where('tbl_appointment.visit_type', '=', 'Scheduled')
+        ->whereNotNull('tbl_client.hei_no')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tototal_scheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+       // ->where('tbl_appointment.visit_type', '=', 'Scheduled')
+        ->whereNotNull('tbl_client.hei_no')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+
+        $toone_unscheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) < 1)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.visit_type', '=', 'Un-Scheduled')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofour_unscheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 1) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 4)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.visit_type', '=', 'Un-Scheduled')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tonine_unscheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 5) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 9)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.visit_type', '=', 'Un-Scheduled')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofourteen_unscheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 10) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.visit_type', '=', 'Un-Scheduled')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tototal_unscheduled_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.visit_type', '=', 'Un-Scheduled')
+        ->where('tbl_appointment.appntmnt_date', '<', Now())
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $toone_missed_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) < 1)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Missed')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofour_missed_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 1) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 4)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Missed')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tonine_missed_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 5) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 9)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Missed')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofourteen_missed_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 10) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Missed')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tototal_missed_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Missed')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $toone_defaulted_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) < 1)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Defaulted')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofour_defaulted_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 1) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 4)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Defaulted')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tonine_defaulted_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 5) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 9)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Defaulted')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofourteen_defaulted_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 10) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Defaulted')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tototal_defaulted_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'Defaulted')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $toone_ltfu_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) < 1)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'LTFU')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofour_ltfu_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 1) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 4)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'LTFU')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tonine_ltfu_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 5) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 9)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'LTFU')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tofourteen_ltfu_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) >= 10) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'LTFU')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        $tototal_ltfu_heis = Pmtct::join('tbl_client', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_appointment', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("case when (((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) > 0) and ((year(curdate()) - year(`tbl_pmtct`.`hei_dob`)) <= 14)) then `tbl_pmtct`.`id` end"))
+        ->where('tbl_appointment.app_status', '=', 'LTFU')
+        ->whereNotNull('tbl_client.hei_no')
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        // non-positive hei
+        $count_booked_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_appointment.id"))
+        ->where('tbl_appointment.app_status', '=', 'Booked')
+        ->where('tbl_appointment.active_app', '=', 1)
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_scheduled_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_appointment.id"))
+        ->where('tbl_appointment.visit_type', '=', 'Scheduled')
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_unscheduled_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_appointment.id"))
+        ->where('tbl_appointment.visit_type', '=', 'Un-Scheduled')
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_deceased_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_client.id"))
+        ->where('tbl_client.status', '=', 'Deceased')
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_transfer_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_client.id"))
+        ->where('tbl_client.status', '=', 'Transfer Out')
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_discharged_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_client.id"))
+        ->where('tbl_client.status', '=', 'Disabled')
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_missed_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_client.id"))
+        ->where('tbl_appointment.app_status', '=', 'Missed')
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_defaulted_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_client.id"))
+        ->where('tbl_appointment.app_status', '=', 'Defaulted')
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_ltfu_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_client.id"))
+        ->where('tbl_appointment.app_status', '=', 'LTFU')
+        ->whereNotNull('tbl_client.hei_no');
+
+        $count_pcr_heis = Appointments::join('tbl_client', 'tbl_client.id', '=', 'tbl_appointment.client_id')
+        ->join('tbl_pmtct', 'tbl_client.id', '=', 'tbl_pmtct.client_id')
+        ->join('tbl_partner_facility', 'tbl_client.mfl_code', '=', 'tbl_partner_facility.mfl_code')
+        ->select(\DB::raw("tbl_client.id"))
+        ->whereNotNull('tbl_pmtct.date_confirmed_positive');
+
+        if (!empty($selected_partners)) {
+            $toone_booked_heis = $toone_booked_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofour_booked_heis = $tofour_booked_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tonine_booked_heis = $tonine_booked_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofourteen_booked_heis = $tofourteen_booked_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tototal_booked_heis = $tototal_booked_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $toone_scheduled_heis = $toone_scheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofour_scheduled_heis = $tofour_scheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tonine_scheduled_heis = $tonine_scheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofourteen_scheduled_heis = $tofourteen_scheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tototal_scheduled_heis = $tototal_scheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $toone_unscheduled_heis = $toone_unscheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofour_unscheduled_heis = $tofour_unscheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tonine_unscheduled_heis = $tonine_unscheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofourteen_unscheduled_heis = $tofourteen_unscheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tototal_unscheduled_heis = $tototal_unscheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $toone_missed_heis = $toone_missed_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofour_missed_heis = $tofour_missed_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tonine_missed_heis = $tonine_missed_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofourteen_missed_heis = $tofourteen_missed_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tototal_missed_heis = $tototal_missed_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $toone_defaulted_heis = $toone_defaulted_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofour_defaulted_heis = $tofour_defaulted_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tonine_defaulted_heis = $tonine_defaulted_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofourteen_defaulted_heis = $tofourteen_defaulted_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tototal_defaulted_heis = $tototal_defaulted_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $toone_ltfu_heis = $toone_ltfu_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofour_ltfu_heis = $tofour_ltfu_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tonine_ltfu_heis = $tonine_ltfu_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tofourteen_ltfu_heis = $tofourteen_ltfu_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $tototal_ltfu_heis = $tototal_ltfu_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_booked_heis = $count_booked_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_scheduled_heis = $count_scheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_unscheduled_heis = $count_unscheduled_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_deceased_heis = $count_deceased_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_transfer_heis = $count_transfer_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_discharged_heis = $count_discharged_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_missed_heis = $count_missed_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_defaulted_heis = $count_defaulted_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_ltfu_heis = $count_ltfu_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+            $count_pcr_heis = $count_pcr_heis->where('tbl_partner_facility.partner_id', $selected_partners);
+        }
+
+        if (!empty($selected_counties)) {
+            $toone_booked_heis = $toone_booked_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofour_booked_heis = $tofour_booked_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tonine_booked_heis = $tonine_booked_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofourteen_booked_heis = $tofourteen_booked_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tototal_booked_heis = $tototal_booked_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $toone_scheduled_heis = $toone_scheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofour_scheduled_heis = $tofour_scheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tonine_scheduled_heis = $tonine_scheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofourteen_scheduled_heis = $tofourteen_scheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tototal_scheduled_heis = $tototal_scheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $toone_unscheduled_heis = $toone_unscheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofour_unscheduled_heis = $tofour_unscheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tonine_unscheduled_heis = $tonine_unscheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofourteen_unscheduled_heis = $tofourteen_unscheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tototal_unscheduled_heis = $tototal_unscheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $toone_missed_heis = $toone_missed_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofour_missed_heis = $tofour_missed_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tonine_missed_heis = $tonine_missed_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofourteen_missed_heis = $tofourteen_missed_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tototal_missed_heis = $tototal_missed_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $toone_defaulted_heis = $toone_defaulted_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofour_defaulted_heis = $tofour_defaulted_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tonine_defaulted_heis = $tonine_defaulted_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofourteen_defaulted_heis = $tofourteen_defaulted_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tototal_defaulted_heis = $tototal_defaulted_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $toone_ltfu_heis = $toone_ltfu_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofour_ltfu_heis = $tofour_ltfu_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tonine_ltfu_heis = $tonine_ltfu_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tofourteen_ltfu_heis = $tofourteen_ltfu_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $tototal_ltfu_heis = $tototal_ltfu_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_booked_heis = $count_booked_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_scheduled_heis = $count_scheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_unscheduled_heis = $count_unscheduled_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_deceased_heis = $count_deceased_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_transfer_heis = $count_transfer_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_discharged_heis = $count_discharged_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_missed_heis = $count_missed_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_defaulted_heis = $count_defaulted_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_ltfu_heis = $count_ltfu_heis->where('tbl_partner_facility.county_id', $selected_counties);
+            $count_pcr_heis = $count_pcr_heis->where('tbl_partner_facility.county_id', $selected_counties);
+        }
+
+
+        if (!empty($selected_subcounties)) {
+            $toone_booked_heis = $toone_booked_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofour_booked_heis = $tofour_booked_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tonine_booked_heis = $tonine_booked_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofourteen_booked_heis = $tofourteen_booked_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tototal_booked_heis = $tototal_booked_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $toone_scheduled_heis = $toone_scheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofour_scheduled_heis = $tofour_scheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tonine_scheduled_heis = $tonine_scheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofourteen_scheduled_heis = $tofourteen_scheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tototal_scheduled_heis = $tototal_scheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $toone_unscheduled_heis = $toone_unscheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofour_unscheduled_heis = $tofour_unscheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tonine_unscheduled_heis = $tonine_unscheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofourteen_unscheduled_heis = $tofourteen_unscheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tototal_unscheduled_heis = $tototal_unscheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $toone_missed_heis = $toone_missed_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofour_missed_heis = $tofour_missed_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tonine_missed_heis = $tonine_missed_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofourteen_missed_heis = $tofourteen_missed_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tototal_missed_heis = $tototal_missed_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $toone_defaulted_heis = $toone_defaulted_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofour_defaulted_heis = $tofour_defaulted_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tonine_defaulted_heis = $tonine_defaulted_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofourteen_defaulted_heis = $tofourteen_defaulted_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tototal_defaulted_heis = $tototal_defaulted_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $toone_ltfu_heis = $toone_ltfu_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofour_ltfu_heis = $tofour_ltfu_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tonine_ltfu_heis = $tonine_ltfu_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tofourteen_ltfu_heis = $tofourteen_ltfu_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $tototal_ltfu_heis = $tototal_ltfu_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_booked_heis = $count_booked_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_scheduled_heis = $count_scheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_unscheduled_heis = $count_unscheduled_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_deceased_heis = $count_deceased_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_transfer_heis = $count_transfer_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_discharged_heis = $count_discharged_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_missed_heis = $count_missed_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_defaulted_heis = $count_defaulted_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_ltfu_heis = $count_ltfu_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+            $count_pcr_heis = $count_pcr_heis->where('tbl_partner_facility.sub_county_id', $selected_subcounties);
+        }
+
+        if (!empty($selected_facilites)) {
+            $toone_booked_heis = $toone_booked_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofour_booked_heis = $tofour_booked_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tonine_booked_heis = $tonine_booked_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofourteen_booked_heis = $tofourteen_booked_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tototal_booked_heis = $tototal_booked_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $toone_scheduled_heis = $toone_scheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofour_scheduled_heis = $tofour_scheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tonine_scheduled_heis = $tonine_scheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofourteen_scheduled_heis = $tofourteen_scheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tototal_scheduled_heis = $tototal_scheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $toone_unscheduled_heis = $toone_unscheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofour_unscheduled_heis = $tofour_unscheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tonine_unscheduled_heis = $tonine_unscheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofourteen_unscheduled_heis = $tofourteen_unscheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tototal_unscheduled_heis = $tototal_unscheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $toone_missed_heis = $toone_missed_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofour_missed_heis = $tofour_missed_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tonine_missed_heis = $tonine_missed_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofourteen_missed_heis = $tofourteen_missed_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tototal_missed_heis = $tototal_missed_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $toone_defaulted_heis = $toone_defaulted_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofour_defaulted_heis = $tofour_defaulted_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tonine_defaulted_heis = $tonine_defaulted_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofourteen_defaulted_heis = $tofourteen_defaulted_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tototal_defaulted_heis = $tototal_defaulted_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $toone_ltfu_heis = $toone_ltfu_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofour_ltfu_heis = $tofour_ltfu_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tonine_ltfu_heis = $tonine_ltfu_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tofourteen_ltfu_heis = $tofourteen_ltfu_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $tototal_ltfu_heis = $tototal_ltfu_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_booked_heis = $count_booked_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_scheduled_heis = $count_scheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_unscheduled_heis = $count_unscheduled_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_deceased_heis = $count_deceased_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_transfer_heis = $count_transfer_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_discharged_heis = $count_discharged_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_missed_heis = $count_missed_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_defaulted_heis = $count_defaulted_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_ltfu_heis = $count_ltfu_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+            $count_pcr_heis = $count_pcr_heis->where('tbl_partner_facility.mfl_code', $selected_facilites);
+        }
+
+        $data["toone_booked_heis"]        = $toone_booked_heis->count();
+        $data["tofour_booked_heis"]        = $tofour_booked_heis->count();
+        $data["tonine_booked_heis"]        = $tonine_booked_heis->count();
+        $data["tofourteen_booked_heis"]        = $tofourteen_booked_heis->count();
+        $data["tototal_booked_heis"]        = $tototal_booked_heis->count();
+        $data["toone_scheduled_heis"]        = $toone_scheduled_heis->count();
+        $data["tofour_scheduled_heis"]        = $tofour_scheduled_heis->count();
+        $data["tonine_scheduled_heis"]        = $tonine_scheduled_heis->count();
+        $data["tofourteen_scheduled_heis"]        = $tofourteen_scheduled_heis->count();
+        $data["tototal_scheduled_heis"]        = $tototal_scheduled_heis->count();
+        $data["toone_unscheduled_heis"]        = $toone_unscheduled_heis->count();
+        $data["tofour_unscheduled_heis"]        = $tofour_unscheduled_heis->count();
+        $data["tonine_unscheduled_heis"]        = $tonine_unscheduled_heis->count();
+        $data["tofourteen_unscheduled_heis"]        = $tofourteen_unscheduled_heis->count();
+        $data["tototal_unscheduled_heis"]        = $tototal_unscheduled_heis->count();
+        $data["toone_missed_heis"]        = $toone_missed_heis->count();
+        $data["tofour_missed_heis"]        = $tofour_missed_heis->count();
+        $data["tonine_missed_heis"]        = $tonine_missed_heis->count();
+        $data["tofourteen_missed_heis"]        = $tofourteen_missed_heis->count();
+        $data["tototal_missed_heis"]        = $tototal_missed_heis->count();
+        $data["toone_defaulted_heis"]        = $toone_defaulted_heis->count();
+        $data["tofour_defaulted_heis"]        = $tofour_defaulted_heis->count();
+        $data["tonine_defaulted_heis"]        = $tonine_defaulted_heis->count();
+        $data["tofourteen_defaulted_heis"]        = $tofourteen_defaulted_heis->count();
+        $data["tototal_defaulted_heis"]        = $tototal_defaulted_heis->count();
+        $data["toone_ltfu_heis"]        = $toone_ltfu_heis->count();
+        $data["tofour_ltfu_heis"]        = $tofour_ltfu_heis->count();
+        $data["tonine_ltfu_heis"]        = $tonine_ltfu_heis->count();
+        $data["tofourteen_ltfu_heis"]        = $tofourteen_ltfu_heis->count();
+        $data["tototal_ltfu_heis"]        = $tototal_ltfu_heis->count();
+        $data["count_booked_heis"]        = $count_booked_heis->count();
+        $data["count_scheduled_heis"]        = $count_scheduled_heis->count();
+        $data["count_unscheduled_heis"]        = $count_unscheduled_heis->count();
+        $data["count_deceased_heis"]        = $count_deceased_heis->count();
+        $data["count_transfer_heis"]        = $count_transfer_heis->count();
+        $data["count_discharged_heis"]        = $count_discharged_heis->count();
+        $data["count_missed_heis"]        = $count_missed_heis->count();
+        $data["count_defaulted_heis"]        = $count_defaulted_heis->count();
+        $data["count_ltfu_heis"]        = $count_ltfu_heis->count();
+        $data["count_pcr_heis"]        = $count_pcr_heis->count();
+
+        return $data;
+
+}
+    
 }

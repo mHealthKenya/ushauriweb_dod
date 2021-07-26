@@ -65,8 +65,7 @@
 </div>
 @endif
 
-<div class="col-md-12 mb-4">
-<div class="row">
+
 
 
 
@@ -79,50 +78,67 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src="https://code.highcharts.com/themes/high-contrast-light.js"></script>
 
-    <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body row">
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body grey" id="allApps">
-                                    <b><?php echo $created_appointmnent_count; ?><br></b>
-                                    Created Appointments
-                                </div>
-                            </div>
+                    <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                          <div class="card-body text-center">
+                           <div class="content">
+                            <p class="text-muted mt-2 mb-0">Created Appointments</p>
+
+                             <p id="allApps" class="text-primary text-20 line-height-1 mb-2">{{$created_appointmnent_count}}</p>
+                           </div>
+                          </div>
+                         </div>
                         </div>
-                        <div class="col-2">
-                            <div class="card">
-                                <div class="card-body grey" id="keptApps">
-                                    <b>{{$kept_appointmnent_count}}<br></b>
-                                    Honoured Appointments
-                                </div>
-                            </div>
+
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                          <div class="card-body text-center">
+                           <div class="content">
+                            <p class="text-muted mt-2 mb-0">Honoured Appointments</p>
+
+                             <p id="keptApps" class="text-primary text-20 line-height-1 mb-2">{{$kept_appointmnent_count}}</p>
+                           </div>
+                          </div>
+                         </div>
                         </div>
-                        <div class="col-2">
-                            <div class="card">
-                                <div class="card-body grey" id="defaultedApps">
-                                    <b>{{$defaulted_appointmnent_count}}<br></b>
-                                    Active Defaulted Appointments
-                                </div>
-                            </div>
+
+                        <div class="col-lg-2 col-md-6 col-sm-6">
+                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                          <div class="card-body text-center">
+                           <div class="content">
+                            <p class="text-muted mt-2 mb-0">Active Defaulted Appointments</p>
+
+                             <p id="defaultedApps" class="text-primary text-20 line-height-1 mb-2">{{$defaulted_appointmnent_count}}</p>
+                           </div>
+                          </div>
+                         </div>
                         </div>
-                        <div class="col-2">
-                            <div class="card">
-                                <div class="card-body grey" id="missedApps">
-                                    <b>{{$missed_appointmnent_count}}<br></b>
-                                    Active Missed Appointments
-                                </div>
-                            </div>
+
+                        <div class="col-lg-2 col-md-6 col-sm-6">
+                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                          <div class="card-body text-center">
+                           <div class="content">
+                            <p class="text-muted mt-2 mb-0">Active Missed Appointments</p>
+
+                             <p id="missedApps" class="text-primary text-20 line-height-1 mb-2">{{$missed_appointmnent_count}}</p>
+                           </div>
+                          </div>
+                         </div>
                         </div>
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body grey" id="ltfuApps">
-                                    <b>{{$ltfu_appointmnent_count}}<br></b>
-                                    Active LTFU Appointments
-                                </div>
-                            </div>
+
+                        <div class="col-lg-2 col-md-6 col-sm-6">
+                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                          <div class="card-body text-center">
+                           <div class="content">
+                            <p class="text-muted mt-2 mb-0">Active LTFU Appointments</p>
+
+                             <p id="ltfuApps" class="text-primary text-20 line-height-1 mb-2">{{$ltfu_appointmnent_count}}</p>
+                           </div>
+                          </div>
+                         </div>
                         </div>
+
                     </div>
 
                     <div class="row">
@@ -138,9 +154,7 @@
                     </div>
 
 
-                </div>
-            </div>
-        </div>
+
 
     <script type="text/javascript">
 
@@ -241,6 +255,11 @@ $(document).ready(function() {
             },
             url: "{{ route('filter_appointment_dashboard') }}",
             success: function(data) {
+                $("#allApps").html(data.created_appointmnent_count);
+                $("#keptApps").html(data.kept_appointmnent_count);
+                $("#defaultedApps").html(data.defaulted_appointmnent_count);
+                $("#missedApps").html(data.missed_appointmnent_count);
+                $("#ltfuApps").html(data.ltfu_appointmnent_count);
 
                 $("#container").html(data.all_appointment_by_marital_single_missed);
                 $("#container").html(data.all_appointment_by_marital_single_defaulted);
@@ -367,8 +386,7 @@ $(document).ready(function() {
 
 
 
-</div>
-</div>
+
                 <!-- end of col -->
 
 @endsection
