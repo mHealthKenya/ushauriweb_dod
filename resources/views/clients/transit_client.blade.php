@@ -10,7 +10,8 @@
     <div class="card text-left">
 
         <div class="card-body">
-            <! <h4 class="card-title mb-3"> Appointments List</h4>
+            <! <h4 class="card-title mb-3">Transit Clients List</h4>
+                <p>List of Clients</p>
                 <div class="col-md-12" style="margin-top:10px; ">
 
                 </div>
@@ -20,37 +21,22 @@
                             <tr>
                                 <th>No.</th>
                                 <th>KDOD Number</th>
-                                <th>Service No</th>
-                                <th>First Name</th>
-                                <th>Middle Name</th>
-                                <th>Last Name</th>
-                                <th>Phone No</th>
-                                <th>Appointment Date</th>
+                                <th>Service Number</th>
+                                <th>Client Name</th>
                                 <th>Appointment Type</th>
-                                <th>Status</th>
-                                <th>Enrollment Date</th>
-                                <th>ART Date</th>
-                                <th>Date Added</th>
+                                <th>Transit CCC Clinic</th>
+                                <th>No of Drugs</th>
+                                <th>No of Duration</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            @if (count($all_appointments) > 0)
-                            @foreach($all_appointments as $result)
+                            @if (count($all_transit) > 0)
+                            @foreach($all_transit as $result)
                             <tr>
                                 <td> {{ $loop->iteration }}</td>
                                 <td> {{$result->clinic_number}}</td>
-                                <td> {{$result->file_no}}</td>
-                                <td> {{$result->f_name}}</td>
-                                <td> {{$result->m_name}}</td>
-                                <td> {{$result->l_name}}</td>
-                                <td> {{$result->phone_no}}</td>
-                                <td> {{$result->appntmnt_date}}</td>
-                                <td> {{$result->app_type_1}}</td>
-                                <td> {{$result->status}}</td>
-                                <td> {{$result->enrollment_date}}</td>
-                                <td> {{$result->art_date}}</td>
-                                <td> {{$result->created_at}}</td>
+
                             </tr>
                             @endforeach
                             @endif

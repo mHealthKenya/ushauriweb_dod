@@ -63,7 +63,8 @@
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Clinic Number</th>
+                                                <th>KDOD Number</th>
+                                                <th>Service Number</th>
                                                 <th>Gender</th>
                                                 <th>Group</th>
                                                 <th>Marital Status</th>

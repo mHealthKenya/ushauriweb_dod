@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('/add/consent', ['uses' => 'App\Http\Controllers\ConsentController@addconsentform', 'as' => 'add-consent']);
   Route::get('/clients/booked', ['uses' => 'App\Http\Controllers\TracerController@booked_clients_tracing', 'as' => 'clients-booked']);
   Route::post('/clients/assign/tracer', ['uses' => 'App\Http\Controllers\TracerController@assign_client', 'as' => 'assign-tracer']);
+  Route::get('/transit/clients', ['uses' => 'App\Http\Controllers\ClientController@transit_client', 'as' => 'transit_client']);
 
   // DCM routes
   Route::get('/Reports/dsd', ['uses' => 'App\Http\Controllers\DcmReportController@dcm_report', 'as' => 'Reports-dsd']);

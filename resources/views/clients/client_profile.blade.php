@@ -83,6 +83,10 @@
                                                         <tr>
                                                             <th>Full Name</th>
                                                             <th>Mobile</th>
+                                                            <th>KDOD Number</th>
+                                                            <th>Service Number</th>
+                                                            <th>Service</th>
+                                                            <th>Unit</th>
                                                             <th>Marital Status</th>
                                                             <th>Language</th>
                                                             <th>Client Condition</th>
@@ -91,8 +95,6 @@
                                                             <th>ART Date</th>
                                                             <th>Group</th>
                                                             <th>Status</th>
-                                                            <th>CCC Number</th>
-                                                            <th>File Number</th>
                                                             <th>Gender</th>
                                                             <th>Sms Enable</th>
                                                             <th>Consent Date</th>
@@ -191,11 +193,12 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
-                                                            <th>Clinic Number</th>
+                                                            <th>KDOD Number</th>
                                                             <th>Phone Number</th>
                                                             <th>Message Type</th>
                                                             <th>Message</th>
                                                             <th>Sent On</th>
+                                                            <th>Service Number</th>
 
 
                                                         </tr>
@@ -260,8 +263,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
-                                                            <th>Clinic Number</th>
-                                                            <th>File No</th>
+                                                            <th>KDOD Number</th>
+                                                            <th>Service No</th>
                                                             <th>Appointment Date</th>
                                                             <th>Appointment Type</th>
                                                             <th>Tracer Name</th>

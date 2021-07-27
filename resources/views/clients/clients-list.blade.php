@@ -20,8 +20,8 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Clinic Number</th>
-                                <th>Serial Number</th>
+                                <th>KDOD Number</th>
+                                <th>Service Number</th>
                                 <th>Client Name</th>
                                 <th>Phone No</th>
                                 <th>DOB</th>

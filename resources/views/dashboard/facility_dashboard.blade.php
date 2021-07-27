@@ -72,8 +72,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>UPN</th>
-                                                            <th>Serial No</th>
+                                                            <th>KDOD Number</th>
+                                                            <th>Service No</th>
                                                             <th>Client Name</th>
                                                             <th>Phone No</th>
                                                             <th>Appointment Date</th>
@@ -113,8 +113,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>UPN</th>
-                                                            <th>Serial No</th>
+                                                            <th>KDOD Number</th>
+                                                            <th>Service No</th>
                                                             <th>Client Name</th>
                                                             <th>Phone No</th>
                                                             <th>Appointment Date</th>
@@ -158,13 +158,12 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>UPN</th>
-                                                            <th>Serial No</th>
+                                                            <th>KDOD Number</th>
+                                                            <th>Service Number</th>
                                                             <th>Client Name</th>
                                                             <th>Phone No</th>
                                                             <th>Appointment Date</th>
                                                             <th>Appointment Type</th>
-
 
                                                         </tr>
                                                     </thead>
@@ -200,8 +199,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>UPN</th>
-                                                            <th>Serial No</th>
+                                                            <th>KDOD Number</th>
+                                                            <th>Service No</th>
                                                             <th>Client Name</th>
                                                             <th>Phone No</th>
                                                             <th>Appointment Date</th>

@@ -80,7 +80,7 @@
                                     <table id="multicolumn_ordering_table" class="display table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Clinic Number</th>
+                                                <th>KDOD Number</th>
                                                 <th>Gender</th>
                                                 <th>Group</th>
                                                 <th>Gender</th>
@@ -90,11 +90,11 @@
                                                 <th>Message Type</th>
                                                 <th>Message Month Year</th>
                                                 <th>Message</th>
-                                                <th>Partner</th>
-                                                <th>County</th>
+                                                <th>Service Name</th>
+                                                <th>Unit Name</th>
                                                 <th>Sub County</th>
                                                 <th>MFL Code</th>
-                                                <th>Facility</th>
+                                                <th>CCC Clinic Name</th>
                                             </tr>
                                         </thead>
                                         <tbody>

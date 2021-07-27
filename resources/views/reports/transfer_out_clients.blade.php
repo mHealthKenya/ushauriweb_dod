@@ -68,186 +68,186 @@
 @endif
 
 <div class="col-md-12 mb-4">
-                    <div class="card text-left">
+    <div class="card text-left">
 
-                        <div class="card-body">
-                         <h4 class="card-title mb-3">Transfer Out Client List</h4>
-                            <div class="col-md-12" style="margin-top:10px; ">
+        <div class="card-body">
+            <h4 class="card-title mb-3">Transfer Out Client List</h4>
+            <div class="col-md-12" style="margin-top:10px; ">
 
-                            </div>
-                                <div class="table-responsive">
-                                    <table id="transfer_out_table" class="display table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>UPN</th>
-                                                <th>Serial No</th>
-                                                <th>Client Name</th>
-                                                <th>Phone No</th>
-                                                <th>DOB</th>
-                                                <th>Type</th>
-                                                <th>Condition</th>
-                                                <th>Previous Clinic</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($all_transfer_clients) > 0)
-                                                @foreach($all_transfer_clients as $result)
-                                                    <tr>
-                                                        <td> {{ $loop->iteration }}</td>
-                                                        <td>  {{$result->clinic_number}}</td>
-                                                        <td>  {{$result->file_no}}</td>
-                                                        <td>  {{$result->full_name}}</td>
-                                                        <td>  {{$result->phone_no}}</td>
-                                                        <td>  {{$result->dob}}</td>
-                                                        <td>  {{$result->name}}</td>
-                                                        <td>  {{$result->client_status}}</td>
-                                                        <td>  {{$result->clinic_previous}}</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
+            </div>
+            <div class="table-responsive">
+                <table id="transfer_out_table" class="display table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>KDOD Number</th>
+                            <th>Service No</th>
+                            <th>Client Name</th>
+                            <th>Phone No</th>
+                            <th>DOB</th>
+                            <th>Type</th>
+                            <th>Condition</th>
+                            <th>Previous Clinic</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (count($all_transfer_clients) > 0)
+                        @foreach($all_transfer_clients as $result)
+                        <tr>
+                            <td> {{ $loop->iteration }}</td>
+                            <td> {{$result->clinic_number}}</td>
+                            <td> {{$result->file_no}}</td>
+                            <td> {{$result->full_name}}</td>
+                            <td> {{$result->phone_no}}</td>
+                            <td> {{$result->dob}}</td>
+                            <td> {{$result->name}}</td>
+                            <td> {{$result->client_status}}</td>
+                            <td> {{$result->clinic_previous}}</td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
 
-                                    </table>
+                </table>
 
-                                </div>
+            </div>
 
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </div>
+</div>
 
-                <div class="col-md-12 mb-4">
-                    <div class="card text-left">
+<div class="col-md-12 mb-4">
+    <div class="card text-left">
 
-                        <div class="card-body">
-                         <h4 class="card-title mb-3">Transfer In Client List</h4>
-                            <div class="col-md-12" style="margin-top:10px; ">
+        <div class="card-body">
+            <h4 class="card-title mb-3">Transfer In Client List</h4>
+            <div class="col-md-12" style="margin-top:10px; ">
 
-                            </div>
-                                <div class="table-responsive">
-                                    <table id="transfer_in_table" class="display table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>UPN</th>
-                                                <th>Serial No</th>
-                                                <th>Client Name</th>
-                                                <th>Phone No</th>
-                                                <th>DOB</th>
-                                                <th>Type</th>
-                                                <th>Condition</th>
-                                                <th>Previous Clinic</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($all_transfer_in) > 0)
-                                                @foreach($all_transfer_in as $result)
-                                                    <tr>
-                                                        <td> {{ $loop->iteration }}</td>
-                                                        <td>  {{$result->clinic_number}}</td>
-                                                        <td>  {{$result->file_no}}</td>
-                                                        <td>  {{$result->full_name}}</td>
-                                                        <td>  {{$result->phone_no}}</td>
-                                                        <td>  {{$result->dob}}</td>
-                                                        <td>  {{$result->name}}</td>
-                                                        <td>  {{$result->client_status}}</td>
-                                                        <td>  {{$result->clinic_previous}}</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
+            </div>
+            <div class="table-responsive">
+                <table id="transfer_in_table" class="display table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>KDOD Number</th>
+                            <th>Service No</th>
+                            <th>Client Name</th>
+                            <th>Phone No</th>
+                            <th>DOB</th>
+                            <th>Type</th>
+                            <th>Condition</th>
+                            <th>Previous Clinic</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (count($all_transfer_in) > 0)
+                        @foreach($all_transfer_in as $result)
+                        <tr>
+                            <td> {{ $loop->iteration }}</td>
+                            <td> {{$result->clinic_number}}</td>
+                            <td> {{$result->file_no}}</td>
+                            <td> {{$result->full_name}}</td>
+                            <td> {{$result->phone_no}}</td>
+                            <td> {{$result->dob}}</td>
+                            <td> {{$result->name}}</td>
+                            <td> {{$result->client_status}}</td>
+                            <td> {{$result->clinic_previous}}</td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
 
-                                    </table>
+                </table>
 
-                                </div>
+            </div>
 
-                        </div>
-                    </div>
-                </div>
-                <!-- end of col -->
+        </div>
+    </div>
+</div>
+<!-- end of col -->
 
 @endsection
 
 @section('page-js')
 
- <script src="{{asset('assets/js/vendor/datatables.min.js')}}"></script>
- <script type="text/javascript">
- $(document).ready(function() {
-            $('select[name="partner"]').on('change', function() {
-                var partnerID = $(this).val();
-                if (partnerID) {
-                    $.ajax({
-                        url: '/get_dashboard_counties/' + partnerID,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
+<script src="{{asset('assets/js/vendor/datatables.min.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select[name="partner"]').on('change', function() {
+            var partnerID = $(this).val();
+            if (partnerID) {
+                $.ajax({
+                    url: '/get_dashboard_counties/' + partnerID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
 
 
-                            $('select[name="county"]').empty();
-                            $.each(data, function(key, value) {
-                                $('select[name="county"]').append('<option value="' + key + '">' + value + '</option>');
-                            });
+                        $('select[name="county"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="county"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
 
 
-                        }
-                    });
-                } else {
-                    $('select[name="county"]').empty();
-                }
-            });
+                    }
+                });
+            } else {
+                $('select[name="county"]').empty();
+            }
         });
+    });
 
-        $(document).ready(function() {
-            $('select[name="county"]').on('change', function() {
-                var countyID = $(this).val();
-                if (countyID) {
-                    $.ajax({
-                        url: '/get_dashboard_sub_counties/' + countyID,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-
-
-                            $('select[name="subcounty"]').empty();
-                            $.each(data, function(key, value) {
-                                $('select[name="subcounty"]').append('<option value="' + key + '">' + value + '</option>');
-                            });
+    $(document).ready(function() {
+        $('select[name="county"]').on('change', function() {
+            var countyID = $(this).val();
+            if (countyID) {
+                $.ajax({
+                    url: '/get_dashboard_sub_counties/' + countyID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
 
 
-                        }
-                    });
-                } else {
-                    $('select[name="subcounty"]').empty();
-                }
-            });
+                        $('select[name="subcounty"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="subcounty"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+
+
+                    }
+                });
+            } else {
+                $('select[name="subcounty"]').empty();
+            }
         });
+    });
 
-        $(document).ready(function() {
-            $('select[name="subcounty"]').on('change', function() {
-                var subcountyID = $(this).val();
-                if (subcountyID) {
-                    $.ajax({
-                        url: '/get_dashboard_facilities/' + subcountyID,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-
-
-                            $('select[name="facility"]').empty();
-                            $.each(data, function(key, value) {
-                                $('select[name="facility"]').append('<option value="' + key + '">' + value + '</option>');
-                            });
+    $(document).ready(function() {
+        $('select[name="subcounty"]').on('change', function() {
+            var subcountyID = $(this).val();
+            if (subcountyID) {
+                $.ajax({
+                    url: '/get_dashboard_facilities/' + subcountyID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
 
 
-                        }
-                    });
-                } else {
-                    $('select[name="facility"]').empty();
-                }
-            });
+                        $('select[name="facility"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="facility"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+
+
+                    }
+                });
+            } else {
+                $('select[name="facility"]').empty();
+            }
         });
-   // multi column ordering
-   $('#transfer_out_table').DataTable({
+    });
+    // multi column ordering
+    $('#transfer_out_table').DataTable({
         columnDefs: [{
             targets: [0],
             orderData: [0, 1]
@@ -259,7 +259,7 @@
             orderData: [4, 0]
         }],
         "paging": true,
-        "responsive":true,
+        "responsive": true,
         "ordering": true,
         "info": true,
         dom: 'Bfrtip',
@@ -279,7 +279,7 @@
             orderData: [4, 0]
         }],
         "paging": true,
-        "responsive":true,
+        "responsive": true,
         "ordering": true,
         "info": true,
         dom: 'Bfrtip',
@@ -287,7 +287,7 @@
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
-    </script>
+</script>
 
 
 @endsection

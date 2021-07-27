@@ -55,13 +55,7 @@
                                     <span class=" text-muted">Appointments</span>
                                 </a>
                             </li>
-                            @if (Auth::user()->access_level == 'Admin')
-                            <li class="item-name">
-                                <a class="" href="{{route('report-IL-dashboard')}}">
-                                    <span class=" text-muted">IL Extract</span>
-                                </a>
-                            </li>
-                            @endif
+                            
                         </ul>
                     </li>
                     <li class="Ul_li--hover">
@@ -75,6 +69,12 @@
                             <li class="item-name">
                                 <a href="{{route('profile')}}">
                                     <span class="item-name">Client Profile</span>
+                                </a>
+                            </li>
+
+                            <li class="item-name">
+                                <a href="{{route('transit_client')}}">
+                                    <span class="item-name">Transit Clients</span>
                                 </a>
                             </li>
 
@@ -100,10 +100,10 @@
                     @endif
                     @if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Partner')
                     <li class="item-name">
-                                <a href="{{route('Reports-clients_dashboard')}}">
-                                    <span class="item-name">Clients</span>
-                                </a>
-                            </li>
+                        <a href="{{route('Reports-clients_dashboard')}}">
+                            <span class="item-name">Clients</span>
+                        </a>
+                    </li>
                     <li class="item-name">
                         <a href={{route('upload-clients-form')}}>
                             <span class="item-name">Upload Clients</span>
