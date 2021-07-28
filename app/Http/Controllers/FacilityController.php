@@ -59,7 +59,7 @@ class FacilityController extends Controller
             if ($facility->save() && $master_update) {
                 Session::flash('statuscode', 'success');
 
-                return redirect('admin/facilities')->with('status', 'Facility added successfully!');
+                return redirect('admin/facilities')->with('status', 'CCC Clinic added successfully!');
             } else {
 
                 Session::flash('statuscode', 'error');

@@ -10,9 +10,9 @@
     <div class="card text-left">
 
         <div class="card-body">
-            <h4 class="card-title mb-3">A list of Partners in the system</h4>
+            <h4 class="card-title mb-3">A list of Service in the system</h4>
             <div class="col-md-12" style="margin-bottom:20px;">
-                <a type="button" href="{{route('admin-partners-form')}}" class="btn btn-primary btn-md pull-right">Add Partner</a>
+                <a type="button" href="{{route('admin-partners-form')}}" class="btn btn-primary btn-md pull-right">Add Service</a>
 
             </div>
             <div class="table-responsive">
@@ -20,8 +20,8 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>Partnar Name</th>
-                            <th>Partner Type</th>
+                            <th>Service Name</th>
+                            <th>Service Type</th>
                             <th>Description</th>
                             <th>Phone Number</th>
                             <th>Email</th>
@@ -88,7 +88,7 @@
                                 <div class="row">
                                     <input type="hidden" name="id" id="id">
                                     <div class="col-md-6 form-group mb-3">
-                                        <label for="firstName1">Partner Name</label>
+                                        <label for="firstName1">Service Name</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Partner name">
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
@@ -100,7 +100,7 @@
                                         <input type="text" class="form-control" id="description" name="description" placeholder="Description">
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
-                                        <label for="add_partner_type">Partner Type</label>
+                                        <label for="add_partner_type">Service Type</label>
                                         <select class="form-control dynamic" data-dependant="rolename" data-width="100%" id="partner_type" name="partner_type">
                                             <option value="">Please select </option>
                                             @if (count($partner_type) > 0)
@@ -149,7 +149,7 @@
         <div class="modal-content">
             <div class="modal-header">
 
-                <div class="card-title mb-3">Delete Partner</div>
+                <div class="card-title mb-3">Delete Service</div>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">

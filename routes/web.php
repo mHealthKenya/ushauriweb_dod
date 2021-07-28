@@ -53,8 +53,8 @@ Route::group(['middleware' => 'auth'], function () {
 
   // Dashboard routes
   Route::get('/main_graph_dashboard', ['uses' => 'App\Http\Controllers\DashboardController@main_graph_dashboard', 'as' => 'main_graph_dashboard']);
-  Route::get('/filter_client_dashboard', ['uses'=>'App\Http\Controllers\DashboardController@filter_client_dashboard', 'as' => 'filter_client_dashboard']);
-  Route::get('/filter_appointment_dashboard', ['uses'=>'App\Http\Controllers\AppointmentController@filter_appointment_dashboard', 'as' => 'filter_appointment_dashboard']);
+  Route::get('/filter_client_dashboard', ['uses' => 'App\Http\Controllers\DashboardController@filter_client_dashboard', 'as' => 'filter_client_dashboard']);
+  Route::get('/filter_appointment_dashboard', ['uses' => 'App\Http\Controllers\AppointmentController@filter_appointment_dashboard', 'as' => 'filter_appointment_dashboard']);
   Route::get('/filter_dashboard', ['uses' => 'App\Http\Controllers\DashboardController@filter_dashboard', 'as' => 'filter_dashboard']);
   Route::get('/get_dashboard_counties/{id}', ['uses' => 'App\Http\Controllers\DashboardController@get_counties', 'as' => 'get_counties']);
   Route::get('/get_dashboard_sub_counties/{id}', ['uses' => 'App\Http\Controllers\DashboardController@get_dashboard_sub_counties', 'as' => 'get_dashboard_sub_counties']);
@@ -176,6 +176,10 @@ Route::group(['middleware' => 'auth'], function () {
   //Broadcast routes
   Route::get('/broadcast', ['uses' => 'App\Http\Controllers\BroadcastController@broadcast_form', 'as' => 'broadcast']);
   Route::post('/send-broadcast', ['uses' => 'App\Http\Controllers\BroadcastController@sendSMS', 'as' => 'send-broadcast']);
+
+  // Units routes
+  Route::get('/admin/units', ['uses' => 'App\Http\Controllers\UnitController@index', 'as' => 'admin-units']);
+  Route::post('/admin/add/units', ['uses' => 'App\Http\Controllers\addUnit@index', 'as' => 'add-units']);
+  Route::post('/admin/edit/units', ['uses' => 'App\Http\Controllers\editUnit@index', 'as' => 'edit-units']);
+  Route::post('/admin/delete/units', ['uses' => 'App\Http\Controllers\deleteUnit@index', 'as' => 'delete-units']);
 });
-
-

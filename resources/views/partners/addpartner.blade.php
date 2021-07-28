@@ -9,13 +9,13 @@
     <div class="col-md-12">
         <div class="card mb-4">
             <div class="card-body">
-                <div class="card-title mb-3">Add Partner</div>
+                <div class="card-title mb-3">Add Service</div>
                 <form role="form" method="post" action="{{route('addpartner')}}">
                     {{ csrf_field() }}
                     <div class="row">
                         <input type="hidden" name="id" id="id">
                         <div class="col-md-6 form-group mb-3">
-                            <label for="firstName1">Partner Name</label>
+                            <label for="firstName1">Service Name</label>
                             <input type="text" class="form-control" id="name" name="name" placeholder="Partner name">
                         </div>
                         <div class="col-md-6 form-group mb-3">
@@ -27,7 +27,7 @@
                             <input type="text" class="form-control" id="description" name="description" placeholder="Description">
                         </div>
                         <div class="col-md-6 form-group mb-3">
-                            <label for="add_partner_type">Partner Type</label>
+                            <label for="add_partner_type">Service Type</label>
                             <select class="form-control dynamic" data-dependant="rolename" data-width="100%" id="partner_type" name="add_partner_type">
                                 <option value="">Please select </option>
                                 @if (count($partner_type) > 0)

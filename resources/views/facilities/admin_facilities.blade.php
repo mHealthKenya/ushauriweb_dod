@@ -6,11 +6,15 @@
 
 @section('main-content')
 
+
 <div class="col-md-12 mb-4">
     <div class="card text-left">
+        <div style="margin-bottom:10px; ">
+            <a type="button" href="{{route('')}}" class="btn btn-primary btn-md pull-right">Add CCC Clinic</a>
+        </div>
 
         <div class="card-body">
-            <h4 class="card-title mb-3">Facilities Lists</h4>
+            <h4 class="card-title mb-3">CCC Clinics Lists</h4>
             <div class="col-md-12" style="margin-top:10px; ">
 
 
@@ -19,11 +23,9 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Facility Name</th>
+                                <th>CCC Clinic Name</th>
                                 <th>MFL Code</th>
-                                <th>County</th>
-                                <th>Sub County</th>
-                                <th>Consituency</th>
+                                <th>Service Name</th>
                                 <th>Owner</th>
                                 <th>Action</th>
 
@@ -37,11 +39,9 @@
                                 <td> {{$result->facility_name}}</td>
                                 <td> {{$result->code}}</td>
                                 <td> {{$result->county_name}}</td>
-                                <td> {{$result->sub_county_name}}</td>
-                                <td> {{$result->consituency_name}}</td>
                                 <td> {{$result->owner}}</td>
                                 <td>
-                                    <button onclick="addfacility({{$result}});" data-toggle="modal" data-target="#addfacility" type="button" class="btn btn-primary btn-sm">Add Facility</button>
+                                    <button onclick="addfacility({{$result}});" data-toggle="modal" data-target="#addfacility" type="button" class="btn btn-primary btn-sm">Add CCC Clinic</button>
                                 </td>
 
                             </tr>
@@ -78,7 +78,7 @@
                                     <input type="hidden" name="county" id="county">
                                     <input type="hidden" name="sub_county" id="sub_county">
                                     <div class="col-md-6 form-group mb-3">
-                                        <label for="firstName1">Facility Name</label>
+                                        <label for="firstName1">CCC Clinic Name</label>
                                         <input type="text" class="form-control" id="facility_name" name="facility_name" placeholder="Facility Name" readonly />
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
@@ -86,22 +86,18 @@
                                         <input type="text" class="form-control" id="mfl_code" name="mfl_code" placeholder="MFL Code" readonly />
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
-                                        <label for="firstName1">Facility Type</label>
+                                        <label for="firstName1">CCC Clinic Type</label>
                                         <input type="text" class="form-control" id="facility_type" name="facility_type" placeholder="Facility Type" readonly />
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="firstName1">Owner</label>
                                         <input type="text" class="form-control" id="owner" name="owner" placeholder="Owner" readonly />
                                     </div>
-                                    <div class="col-md-6 form-group mb-3">
-                                        <label for="firstName1">Level</label>
-                                        <input type="text" class="form-control" id="level" name="level" placeholder="Level" readonly />
-                                    </div>
 
                                     <div class="col-md-6 form-group mb-3">
-                                        <label for="picker1">Partner Name</label>
+                                        <label for="picker1">Service Name</label>
                                         <select id="partner" name="partner" class="form-control" required="">
-                                            <option>Select Partner</option>
+                                            <option>Select Service</option>
 
                                             @if (count($all_partners) > 0)
                                             @foreach($all_partners as $partner)
@@ -126,7 +122,7 @@
                                     </div>
 
                                 </div>
-                                <button type="submit" class="btn btn-block btn-primary">Add Facility</button>
+                                <button type="submit" class="btn btn-block btn-primary">Add CCC Clinic</button>
                             </form>
                         </div>
                     </div>

@@ -17,7 +17,7 @@
                 <div class="form-group">
 
                     <select class="form-control filter_partner  input-rounded input-sm select2" id="partners" name="partner">
-                        <option value="">Please select Partner</option>
+                        <option value="">Please select Service</option>
                         @foreach ($all_partners as $partner => $value)
                         <option value="{{ $partner }}"> {{ $value }}</option>
                         @endforeach
@@ -29,16 +29,7 @@
             <div class="col">
                 <div class="form-group">
                     <select class="form-control county  input-rounded input-sm select2" id="counties" name="county">
-                        <option value="">Please select County:</option>
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <span class="filter_sub_county_wait" style="display: none;">Loading , Please Wait ...</span>
-                    <select class="form-control subcounty input-rounded input-sm select2" id="subcounties" name="subcounty">
-                        <option value="">Please Select Sub County : </option>
+                        <option value="">Please select Unit:</option>
                         <option value=""></option>
                     </select>
                 </div>
@@ -48,7 +39,7 @@
                     <span class="filter_facility_wait" style="display: none;">Loading , Please Wait ...</span>
 
                     <select class="form-control filter_facility input-rounded input-sm select2" id="facilities" name="facility">
-                        <option value="">Please select Facility : </option>
+                        <option value="">Please select CCC Clinic : </option>
                         <option value=""></option>
                     </select>
                 </div>
@@ -200,32 +191,7 @@
             var countyID = $(this).val();
             if (countyID) {
                 $.ajax({
-                    url: '/get_dashboard_sub_counties/' + countyID,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-
-
-                        $('select[name="subcounty"]').empty();
-                        $.each(data, function(key, value) {
-                            $('select[name="subcounty"]').append('<option value="' + key + '">' + value + '</option>');
-                        });
-
-
-                    }
-                });
-            } else {
-                $('select[name="subcounty"]').empty();
-            }
-        });
-    });
-
-    $(document).ready(function() {
-        $('select[name="subcounty"]').on('change', function() {
-            var subcountyID = $(this).val();
-            if (subcountyID) {
-                $.ajax({
-                    url: '/get_dashboard_facilities/' + subcountyID,
+                    url: '/get_dashboard_facilities/' + countyID,
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
@@ -250,7 +216,6 @@
         e.preventDefault();
         let partners = $('#partners').val();
         let counties = $('#counties').val();
-        let subcounties = $('#subcounties').val();
         let facilities = $('#facilities').val();
         $.ajaxSetup({
             headers: {
@@ -263,7 +228,6 @@
             data: {
                 "partners": partners,
                 "counties": counties,
-                "subcounties": subcounties,
                 "facilities": facilities
             },
             url: "{{ route('filter_dashboard') }}",

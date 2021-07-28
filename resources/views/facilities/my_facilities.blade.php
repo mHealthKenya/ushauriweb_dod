@@ -10,11 +10,11 @@
     <div class="card text-left">
 
         <div class="card-body">
-        @if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Partner' || Auth::user()->access_level == 'Donor')
-            <h4 class="card-title mb-3">My Facilities Lists</h4>
+            @if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Partner' || Auth::user()->access_level == 'Donor')
+            <h4 class="card-title mb-3">My CCC Clinics Lists</h4>
             @endif
             @if (Auth::user()->access_level == 'Facility')
-            <h4 class="card-title mb-3">My Facility</h4>
+            <h4 class="card-title mb-3">My CCC Clinic</h4>
             @endif
             <div class="col-md-12" style="margin-top:10px; ">
 
@@ -24,14 +24,11 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Facility Name</th>
+                                <th>CCC Clinic Name</th>
                                 <th>MFL Code</th>
-                                <th>Facility Type</th>
-                                <th>County</th>
-                                <th>Sub County</th>
-                                <th>Consituency</th>
+                                <th>CCC Clinic Type</th>
+                                <th>Service</th>
                                 <th>Owner</th>
-                                <th>Approve</th>
                                 <th>Action</th>
 
                             </tr>
@@ -45,16 +42,9 @@
                                 <td> {{$result->code}}</td>
                                 <td> {{$result->facility_type}}</td>
                                 <td> {{$result->county_name}}</td>
-                                <td> {{$result->sub_county_name}}</td>
-                                <td> {{$result->consituency_name}}</td>
                                 <td> {{$result->owner}}</td>
-                                @if($result->is_approved == 'Yes')
-                                <td>{{$result->is_approved}}</td>
-                                @else
-                                <td>
-                                    <button onclick="approvefacility({{$result}});" data-toggle="modal" data-target="#approvefacility" type="button" class="btn btn-primary btn-sm">Approve</button>
-                                </td>
-                                @endif
+
+
                                 @if (Auth::user()->access_level == 'Admin' || Auth::user()->access_level == 'Partner')
                                 <td>
                                     <button onclick="editfacility({{$result}});" data-toggle="modal" data-target="#editfacility" type="button" class="btn btn-primary btn-sm">Edit</button>
@@ -76,32 +66,6 @@
 </div>
 <!-- end of col -->
 
-<div id="approvefacility" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Approve Facility?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Facility Name: <b>{{$result->facility_name}}</b> MFL Code: <b>{{$result->code}}</b></p>
-            </div>
-            <div class="modal-footer">
-                <form role="form" method="post" action="{{route('approve-facility')}}">
-                    {{ csrf_field() }}
-
-                    <input type="text" name="mfl_code" id="mfl_code">
-                    <button type="submit" class="btn btn-primary">Yes, Approve it!</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="editfacility" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -109,34 +73,34 @@
         <div class="modal-content">
             <div class="modal-header">
 
-                <div class="card-title mb-3">Edit Facility</div>
+                <div class="card-title mb-3">Edit CCC Clinic</div>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                        <form role="form" method="post" action="{{route('edit_facility')}}">
+                            <form role="form" method="post" action="{{route('edit_facility')}}">
                                 {{ csrf_field() }}
 
                                 <input type="hidden" name="mflcode" id="mflcode">
                                 <div class="row">
-                                <div class="col-md-6 form-group mb-3">
-                                        <label for="firstName1">Facility Name</label>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="firstName1">CCC Clinic Name</label>
                                         <input type="text" class="form-control" id="facility_name" name="facility_name" placeholder="Facility Name" readonly />
 
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
                                         <label for="firstName1">MFL Code</label>
                                         <input type="text" class="form-control" id="code" name="code" placeholder="MFL Code" readonly />
 
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
                                         <label for="firstName1">No of Clients on ART</label>
                                         <input type="text" class="form-control" id="average_clients" name="average_clients" placeholder="No of Clients on ART" />
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
-                                        <label for="picker1">Partner Name</label>
+                                        <label for="picker1">Service Name</label>
                                         <select id="partner" name="partner" class="form-control" required="">
                                             <option>Select Partner</option>
                                             @if (count($all_partners) > 0)
@@ -149,7 +113,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-block btn-primary">Update Facility</button>
+                                <button type="submit" class="btn btn-block btn-primary">Update CCC Clinic</button>
                             </form>
                         </div>
                     </div>
@@ -170,9 +134,6 @@
 
 <script src="{{asset('assets/js/vendor/datatables.min.js')}}"></script>
 <script type="text/javascript">
-    function approvefacility(result) {
-        $('#mfl_code').val(result.code);
-    }
     function editfacility(result) {
         $('#code').val(result.code);
         $('#facility_name').val(result.facility_name);

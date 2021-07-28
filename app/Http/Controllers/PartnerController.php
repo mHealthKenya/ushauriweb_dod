@@ -6,15 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\Partner;
 use App\Models\PartnerType;
 use Session;
+use Auth;
 use Exception;
 
 class PartnerController extends Controller
 {
     public function index()
     {
+        if (Auth::user()->access_level == 'Admin'){
         $all_partners = Partner::join('tbl_partner_type', 'tbl_partner.partner_type_id', '=', 'tbl_partner_type.id')
             ->select('tbl_partner.id', 'tbl_partner.name as partner_name', 'tbl_partner.phone_no', 'tbl_partner.description', 'tbl_partner.e_mail', 'tbl_partner.location', 'tbl_partner.status', 'tbl_partner.created_at', 'tbl_partner.updated_at', 'tbl_partner_type.name as partner_type')
             ->get();
+        }
         $partner_type = PartnerType::all();
 
         return view('partners.new_partner', compact('all_partners', 'partner_type'));

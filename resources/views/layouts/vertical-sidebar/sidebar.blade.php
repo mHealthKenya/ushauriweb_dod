@@ -55,7 +55,7 @@
                                     <span class=" text-muted">Appointments</span>
                                 </a>
                             </li>
-                            
+
                         </ul>
                     </li>
                     <li class="Ul_li--hover">
@@ -260,14 +260,15 @@
                     </a>
                     <ul class="mm-collapse">
                         @if (Auth::user()->access_level == 'Admin')
+
                         <li class="item-name">
-                            <a class="" href="{{route('admin-donors')}}">
-                                <span class="item-name">Donor</span>
+                            <a class="" href="{{route('admin-partners')}}">
+                                <span class="item-name">Services</span>
                             </a>
                         </li>
                         <li class="item-name">
-                            <a class="" href="{{route('admin-partners')}}">
-                                <span class="item-name">Partner</span>
+                            <a class="" href="{{route('admin-units')}}">
+                                <span class="item-name">Units</span>
                             </a>
                         </li>
                         <li class="item-name">
@@ -277,7 +278,7 @@
                         </li>
                         <li class="item-name">
                             <a class="" href="{{route('admin_facilities')}}">
-                                <span class="item-name">Facilities</span>
+                                <span class="item-name">CCC Clinics</span>
                             </a>
                         </li>
                         <li class="item-name">
@@ -290,17 +291,7 @@
                                 <span class="item-name">Content</span>
                             </a>
                         </li>
-                        <li class="item-name">
-                            <a class="" href="">
-                                <span class="item-name">Module Mngr</span>
-                            </a>
-                        </li>
 
-                        <li class="item-name">
-                            <a class="" href="">
-                                <span class="item-name">Sender</span>
-                            </a>
-                        </li>
                         <li class="item-name">
                             <a class="" href="">
                                 <span class="item-name">Roles</span>
@@ -309,16 +300,6 @@
                         <li class="item-name">
                             <a class="" href="">
                                 <span class="item-name">Language</span>
-                            </a>
-                        </li>
-                        <li class="item-name">
-                            <a class="" href="">
-                                <span class="item-name">Notification Conf</span>
-                            </a>
-                        </li>
-                        <li class="item-name">
-                            <a class="" href="">
-                                <span class="item-name">Role Modules</span>
                             </a>
                         </li>
 
@@ -343,25 +324,8 @@
                         @endif
                         @if (Auth::user()->access_level == 'Partner')
                         <li class="item-name">
-                            <a class="" href={{route('admin-users')}}>
-                                <span class="item-name">Users</span>
-                            </a>
-                        </li>
-                        <li class="item-name">
-                            <a class="" href="{{route('broadcast')}}">
-                                <span class="item-name">Broadcast</span>
-                            </a>
-                        </li>
-                        @endif
-                        @if (Auth::user()->access_level == 'Donor')
-                        <li class="item-name">
-                            <a class="" href="{{route('admin-partners')}}">
-                                <span class="item-name">Partner</span>
-                            </a>
-                        </li>
-                        <li class="item-name">
-                            <a class="" href="{{route('admin_facilities')}}">
-                                <span class="item-name">Facilities</span>
+                            <a class="" href="{{route('admin-units')}}">
+                                <span class="item-name">Units</span>
                             </a>
                         </li>
                         <li class="item-name">
@@ -375,6 +339,7 @@
                             </a>
                         </li>
                         @endif
+
                     </ul>
                 </li>
 
@@ -480,7 +445,7 @@
                         </li>
                         <li class="item-name">
                             <a class="" href="{{route('my_facilities')}}">
-                                <span class="item-name">My Facilities</span>
+                                <span class="item-name">My CCC Clinic</span>
                             </a>
                         </li>
                         <li class="item-name">
