@@ -38,7 +38,7 @@
                                 <td> {{ $loop->iteration }}</td>
                                 <td> {{$result->facility_name}}</td>
                                 <td> {{$result->code}}</td>
-                                <td> {{$result->county_name}}</td>
+                                <td> {{$result->unit_name}}</td>
                                 <td> {{$result->owner}}</td>
                                 <td>
                                     <button onclick="addfacility({{$result}});" data-toggle="modal" data-target="#addfacility" type="button" class="btn btn-primary btn-sm">Add CCC Clinic</button>

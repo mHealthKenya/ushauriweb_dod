@@ -11,11 +11,13 @@ class UnitController extends Controller
 {
     public function index()
     {
-        //$all_unit = Unit::join('tbl_partner', 'tbl_unit.service_id', '=', 'tbl_partner.id')
-        //->select('tbl_unit.name as unit_name', 'tbl_partner.name as partner_name', 'tbl_unit.id')
-        //->get();
+        $all_unit = Unit::join('tbl_partner', 'tbl_unit.service_id', '=', 'tbl_partner.id')
+            ->select('tbl_unit.unit_name as unit_name', 'tbl_partner.name as partner_name', 'tbl_unit.id', 'tbl_unit.created_at', 'tbl_unit.updated_at')
+            ->get();
 
-        return view('units.units');
+        $services = Partner::all();
+
+        return view('units.units', compact('services', 'all_unit'));
     }
 
     public function addUnit(Request $request)

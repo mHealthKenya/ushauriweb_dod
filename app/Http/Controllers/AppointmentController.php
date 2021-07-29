@@ -1908,35 +1908,35 @@ class AppointmentController extends Controller
         }
 
         if (!empty($selected_counties)) {
-            $created_appointmnent_count = $created_appointmnent_count->where('tbl_partner_facility.county_id', $selected_counties);
-            $kept_appointmnent_count = $kept_appointmnent_count->where('tbl_partner_facility.county_id', $selected_counties);
-            $defaulted_appointmnent_count = $defaulted_appointmnent_count->where('tbl_partner_facility.county_id', $selected_counties);
-            $missed_appointmnent_count = $missed_appointmnent_count->where('tbl_partner_facility.county_id', $selected_counties);
-            $ltfu_appointmnent_count = $ltfu_appointmnent_count->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_single_missed = $all_appointment_by_marital_single_missed->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_single_defaulted = $all_appointment_by_marital_single_defaulted->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_single_ltfu = $all_appointment_by_marital_single_ltfu->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_monogomous_missed = $all_appointment_by_marital_monogomous_missed->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_monogomous_defaulted = $all_appointment_by_marital_monogomous_defaulted->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_monogomous_lftu = $all_appointment_by_marital_monogomous_lftu->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_divorced_missed = $all_appointment_by_marital_divorced_missed->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_divorced_defaulted = $all_appointment_by_marital_divorced_defaulted->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_divorced_lftu = $all_appointment_by_marital_divorced_lftu->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_widowed_missed = $all_appointment_by_marital_widowed_missed->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_widowed_defaulted = $all_appointment_by_marital_widowed_defaulted->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_widowed_lftu = $all_appointment_by_marital_widowed_lftu->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_cohabiting_missed = $all_appointment_by_marital_cohabiting_missed->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_cohabiting_defaulted = $all_appointment_by_marital_cohabiting_defaulted->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_cohabiting_lftu = $all_appointment_by_marital_cohabiting_lftu->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_unavailable_missed = $all_appointment_by_marital_unavailable_missed->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_unavailable_defaulted = $all_appointment_by_marital_unavailable_defaulted->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_unavailable_lftu = $all_appointment_by_marital_unavailable_lftu->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_polygamous_missed = $all_appointment_by_marital_polygamous_missed->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_polygamous_defaulted = $all_appointment_by_marital_polygamous_defaulted->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_polygamous_lftu = $all_appointment_by_marital_polygamous_lftu->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_notapplicable_missed = $all_appointment_by_marital_notapplicable_missed->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_notapplicable_defaulted = $all_appointment_by_marital_notapplicable_defaulted->where('tbl_partner_facility.county_id', $selected_counties);
-            $all_appointment_by_marital_notapplicable_lftu = $all_appointment_by_marital_notapplicable_lftu->where('tbl_partner_facility.county_id', $selected_counties);
+            $created_appointmnent_count = $created_appointmnent_count->where('tbl_partner_facility.unit_id', $selected_counties);
+            $kept_appointmnent_count = $kept_appointmnent_count->where('tbl_partner_facility.unit_id', $selected_counties);
+            $defaulted_appointmnent_count = $defaulted_appointmnent_count->where('tbl_partner_facility.unit_id', $selected_counties);
+            $missed_appointmnent_count = $missed_appointmnent_count->where('tbl_partner_facility.unit_id', $selected_counties);
+            $ltfu_appointmnent_count = $ltfu_appointmnent_count->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_single_missed = $all_appointment_by_marital_single_missed->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_single_defaulted = $all_appointment_by_marital_single_defaulted->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_single_ltfu = $all_appointment_by_marital_single_ltfu->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_monogomous_missed = $all_appointment_by_marital_monogomous_missed->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_monogomous_defaulted = $all_appointment_by_marital_monogomous_defaulted->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_monogomous_lftu = $all_appointment_by_marital_monogomous_lftu->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_divorced_missed = $all_appointment_by_marital_divorced_missed->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_divorced_defaulted = $all_appointment_by_marital_divorced_defaulted->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_divorced_lftu = $all_appointment_by_marital_divorced_lftu->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_widowed_missed = $all_appointment_by_marital_widowed_missed->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_widowed_defaulted = $all_appointment_by_marital_widowed_defaulted->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_widowed_lftu = $all_appointment_by_marital_widowed_lftu->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_cohabiting_missed = $all_appointment_by_marital_cohabiting_missed->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_cohabiting_defaulted = $all_appointment_by_marital_cohabiting_defaulted->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_cohabiting_lftu = $all_appointment_by_marital_cohabiting_lftu->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_unavailable_missed = $all_appointment_by_marital_unavailable_missed->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_unavailable_defaulted = $all_appointment_by_marital_unavailable_defaulted->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_unavailable_lftu = $all_appointment_by_marital_unavailable_lftu->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_polygamous_missed = $all_appointment_by_marital_polygamous_missed->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_polygamous_defaulted = $all_appointment_by_marital_polygamous_defaulted->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_polygamous_lftu = $all_appointment_by_marital_polygamous_lftu->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_notapplicable_missed = $all_appointment_by_marital_notapplicable_missed->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_notapplicable_defaulted = $all_appointment_by_marital_notapplicable_defaulted->where('tbl_partner_facility.unit_id', $selected_counties);
+            $all_appointment_by_marital_notapplicable_lftu = $all_appointment_by_marital_notapplicable_lftu->where('tbl_partner_facility.unit_id', $selected_counties);
         }
 
         if (!empty($selected_subcounties)) {

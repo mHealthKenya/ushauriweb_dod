@@ -30,6 +30,22 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if (count($all_unit) > 0)
+                        @foreach($all_unit as $result)
+                        <tr>
+                            <td> {{ $loop->iteration }}</td>
+                            <td> {{$result->unit_name}}</td>
+                            <td> {{$result->partner_name}}</td>
+                            <td> {{$result->created_at}}</td>
+                            <td> {{$result->updated_at}}</td>
+                            <td>
+                                <button onclick="" data-toggle="modal" data-target="#" type="button" class="btn btn-primary btn-sm">Edit</button>
+                                <button onclick="" data-toggle="modal" data-target="#" type="button" class="btn btn-primary btn-sm">Delete</button>
+                            </td>
+
+                        </tr>
+                        @endforeach
+                        @endif
 
                     </tbody>
 
@@ -40,7 +56,7 @@
         </div>
     </div>
 </div>
-!-- end of col -->
+<!-- end of col -->
 <div id="addunit" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -55,21 +71,24 @@
                 <div class="col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form role="form" method="post" action="{{route('add_facility')}}">
+                            <form role="form" method="post" action="{{route('add-units')}}">
                                 {{ csrf_field() }}
                                 <div class="row">
                                     <input type="hidden" name="id" id="id">
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="firstName1">Unit Name</label>
-                                        <input type="text" class="form-control" id="unit_name" name="unit_name" placeholder="Facility Name" />
+                                        <input type="text" class="form-control" id="unit_name" name="unit_name" placeholder="Unit Name" />
                                     </div>
 
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="picker1">Service Name</label>
                                         <select id="partner" name="service" class="form-control" required="">
                                             <option>Select Service</option>
-
-
+                                            @if (count($services) > 0)
+                                            @foreach($services as $service)
+                                            <option value="{{$service->id }}">{{ ucwords($service->name) }}</option>
+                                            @endforeach
+                                            @endif
                                             <option></option>
                                         </select>
                                     </div>
@@ -112,15 +131,18 @@
                                     <input type="hidden" name="id" id="id">
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="firstName1">Unit Name</label>
-                                        <input type="text" class="form-control" id="unit_name" name="unit_name" placeholder="Donor name">
+                                        <input type="text" class="form-control" id="unit_name" name="unit_name" placeholder="Unit name">
                                     </div>
 
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="picker1">Service Name</label>
                                         <select id="partner" name="service" class="form-control" required="">
                                             <option>Select Service</option>
-
-
+                                            @if (count($services) > 0)
+                                            @foreach($services as $service)
+                                            <option value="{{$service->id }}">{{ ucwords($service->name) }}</option>
+                                            @endforeach
+                                            @endif
                                             <option></option>
                                         </select>
                                     </div>

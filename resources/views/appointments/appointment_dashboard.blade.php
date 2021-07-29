@@ -62,170 +62,169 @@
 
 
 <div id="highchart"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/series-label.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/themes/high-contrast-light.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/themes/high-contrast-light.js"></script>
 
-                    <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                          <div class="card-body text-center">
-                           <div class="content">
-                            <p class="text-muted mt-2 mb-0">Created Appointments</p>
+<div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">Created Appointments</p>
 
-                             <p id="allApps" class="text-primary text-20 line-height-1 mb-2">{{$created_appointmnent_count}}</p>
-                           </div>
-                          </div>
-                         </div>
-                        </div>
+                    <p id="allApps" class="text-primary text-20 line-height-1 mb-2">{{$created_appointmnent_count}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                          <div class="card-body text-center">
-                           <div class="content">
-                            <p class="text-muted mt-2 mb-0">Honoured Appointments</p>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">Honoured Appointments</p>
 
-                             <p id="keptApps" class="text-primary text-20 line-height-1 mb-2">{{$kept_appointmnent_count}}</p>
-                           </div>
-                          </div>
-                         </div>
-                        </div>
+                    <p id="keptApps" class="text-primary text-20 line-height-1 mb-2">{{$kept_appointmnent_count}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <div class="col-lg-2 col-md-6 col-sm-6">
-                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                          <div class="card-body text-center">
-                           <div class="content">
-                            <p class="text-muted mt-2 mb-0">Active Defaulted Appointments</p>
+    <div class="col-lg-2 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">Active Defaulted Appointments</p>
 
-                             <p id="defaultedApps" class="text-primary text-20 line-height-1 mb-2">{{$defaulted_appointmnent_count}}</p>
-                           </div>
-                          </div>
-                         </div>
-                        </div>
+                    <p id="defaultedApps" class="text-primary text-20 line-height-1 mb-2">{{$defaulted_appointmnent_count}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <div class="col-lg-2 col-md-6 col-sm-6">
-                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                          <div class="card-body text-center">
-                           <div class="content">
-                            <p class="text-muted mt-2 mb-0">Active Missed Appointments</p>
+    <div class="col-lg-2 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">Active Missed Appointments</p>
 
-                             <p id="missedApps" class="text-primary text-20 line-height-1 mb-2">{{$missed_appointmnent_count}}</p>
-                           </div>
-                          </div>
-                         </div>
-                        </div>
+                    <p id="missedApps" class="text-primary text-20 line-height-1 mb-2">{{$missed_appointmnent_count}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <div class="col-lg-2 col-md-6 col-sm-6">
-                         <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
-                          <div class="card-body text-center">
-                           <div class="content">
-                            <p class="text-muted mt-2 mb-0">Active LTFU Appointments</p>
+    <div class="col-lg-2 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">Active LTFU Appointments</p>
 
-                             <p id="ltfuApps" class="text-primary text-20 line-height-1 mb-2">{{$ltfu_appointmnent_count}}</p>
-                           </div>
-                          </div>
-                         </div>
-                        </div>
+                    <p id="ltfuApps" class="text-primary text-20 line-height-1 mb-2">{{$ltfu_appointmnent_count}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    </div>
+</div>
 
-                    <div class="row">
-                        <div class="col-12">
+<div class="row">
+    <div class="col-12">
 
-                            <div class="card-body row">
-                                <div id="container" class="col" style="height: 450px;margin-top:40px;"></div> <br />
-                            </div>
-                            <div class="card-body row">
-                                <div id="trend" class="col" style="height: 450px;margin-top:40px;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-
+        <div class="card-body row">
+            <div id="container" class="col" style="height: 450px;margin-top:40px;"></div> <br />
+        </div>
+        <div class="card-body row">
+            <div id="trend" class="col" style="height: 450px;margin-top:40px;"></div>
+        </div>
+    </div>
+</div>
 
 
-    <script type="text/javascript">
-
-$(document).ready(function() {
-            $('select[name="partner"]').on('change', function() {
-                var partnerID = $(this).val();
-                if (partnerID) {
-                    $.ajax({
-                        url: '/get_dashboard_counties/' + partnerID,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
 
 
-                            $('select[name="county"]').empty();
-                            $.each(data, function(key, value) {
-                                $('select[name="county"]').append('<option value="' + key + '">' + value + '</option>');
-                            });
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select[name="partner"]').on('change', function() {
+            var partnerID = $(this).val();
+            if (partnerID) {
+                $.ajax({
+                    url: '/get_dashboard_counties/' + partnerID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
 
 
-                        }
-                    });
-                } else {
-                    $('select[name="county"]').empty();
-                }
-            });
+                        $('select[name="county"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="county"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+
+
+                    }
+                });
+            } else {
+                $('select[name="county"]').empty();
+            }
         });
+    });
 
-        $(document).ready(function() {
-            $('select[name="county"]').on('change', function() {
-                var countyID = $(this).val();
-                if (countyID) {
-                    $.ajax({
-                        url: '/get_dashboard_sub_counties/' + countyID,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-
-
-                            $('select[name="subcounty"]').empty();
-                            $.each(data, function(key, value) {
-                                $('select[name="subcounty"]').append('<option value="' + key + '">' + value + '</option>');
-                            });
+    $(document).ready(function() {
+        $('select[name="county"]').on('change', function() {
+            var countyID = $(this).val();
+            if (countyID) {
+                $.ajax({
+                    url: '/get_dashboard_sub_counties/' + countyID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
 
 
-                        }
-                    });
-                } else {
-                    $('select[name="subcounty"]').empty();
-                }
-            });
+                        $('select[name="subcounty"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="subcounty"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+
+
+                    }
+                });
+            } else {
+                $('select[name="subcounty"]').empty();
+            }
         });
+    });
 
-        $(document).ready(function() {
-            $('select[name="county"]').on('change', function() {
-                var countyID = $(this).val();
-                if (countyID) {
-                    $.ajax({
-                        url: '/get_dashboard_facilities/' + countyID,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-
-
-                            $('select[name="facility"]').empty();
-                            $.each(data, function(key, value) {
-                                $('select[name="facility"]').append('<option value="' + key + '">' + value + '</option>');
-                            });
+    $(document).ready(function() {
+        $('select[name="county"]').on('change', function() {
+            var countyID = $(this).val();
+            if (countyID) {
+                $.ajax({
+                    url: '/get_dashboard_facilities/' + countyID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
 
 
-                        }
-                    });
-                } else {
-                    $('select[name="facility"]').empty();
-                }
-            });
+                        $('select[name="facility"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="facility"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+
+
+                    }
+                });
+            } else {
+                $('select[name="facility"]').empty();
+            }
         });
+    });
 
-        $('#dataFilter').on('submit', function(e) {
+    $('#dataFilter').on('submit', function(e) {
         e.preventDefault();
         let partners = $('#partners').val();
         let counties = $('#counties').val();
@@ -282,39 +281,39 @@ $(document).ready(function() {
             }
         });
     });
-        var singleMissed =  <?php echo json_encode($all_appointment_by_marital_single_missed) ?>;
-        var singleDefaulted =  <?php echo json_encode($all_appointment_by_marital_single_defaulted) ?>;
-        var singleLTFU =  <?php echo json_encode($all_appointment_by_marital_single_ltfu) ?>;
+    var singleMissed = <?php echo json_encode($all_appointment_by_marital_single_missed) ?>;
+    var singleDefaulted = <?php echo json_encode($all_appointment_by_marital_single_defaulted) ?>;
+    var singleLTFU = <?php echo json_encode($all_appointment_by_marital_single_ltfu) ?>;
 
-        var monogamousMissed =  <?php echo json_encode($all_appointment_by_marital_monogomous_missed) ?>;
-        var monogamousDefaulted =  <?php echo json_encode($all_appointment_by_marital_monogomous_defaulted) ?>;
-        var monogamousLTFU =  <?php echo json_encode($all_appointment_by_marital_monogomous_lftu) ?>;
+    var monogamousMissed = <?php echo json_encode($all_appointment_by_marital_monogomous_missed) ?>;
+    var monogamousDefaulted = <?php echo json_encode($all_appointment_by_marital_monogomous_defaulted) ?>;
+    var monogamousLTFU = <?php echo json_encode($all_appointment_by_marital_monogomous_lftu) ?>;
 
-        var divorcedMissed =  <?php echo json_encode($all_appointment_by_marital_divorced_missed) ?>;
-        var divorcedDefaulted =  <?php echo json_encode($all_appointment_by_marital_divorced_defaulted) ?>;
-        var divorcedLTFU =  <?php echo json_encode($all_appointment_by_marital_divorced_lftu) ?>;
+    var divorcedMissed = <?php echo json_encode($all_appointment_by_marital_divorced_missed) ?>;
+    var divorcedDefaulted = <?php echo json_encode($all_appointment_by_marital_divorced_defaulted) ?>;
+    var divorcedLTFU = <?php echo json_encode($all_appointment_by_marital_divorced_lftu) ?>;
 
-        var widowedMissed =  <?php echo json_encode($all_appointment_by_marital_widowed_missed) ?>;
-        var widowedDefaulted =  <?php echo json_encode($all_appointment_by_marital_widowed_defaulted) ?>;
-        var widowedLTFU =  <?php echo json_encode($all_appointment_by_marital_widowed_lftu) ?>;
+    var widowedMissed = <?php echo json_encode($all_appointment_by_marital_widowed_missed) ?>;
+    var widowedDefaulted = <?php echo json_encode($all_appointment_by_marital_widowed_defaulted) ?>;
+    var widowedLTFU = <?php echo json_encode($all_appointment_by_marital_widowed_lftu) ?>;
 
-        var cohabitingMissed =  <?php echo json_encode($all_appointment_by_marital_cohabiting_missed) ?>;
-        var cohabitingDefaulted =  <?php echo json_encode($all_appointment_by_marital_cohabiting_defaulted) ?>;
-        var cohabitingLTFU =  <?php echo json_encode($all_appointment_by_marital_cohabiting_lftu) ?>;
+    var cohabitingMissed = <?php echo json_encode($all_appointment_by_marital_cohabiting_missed) ?>;
+    var cohabitingDefaulted = <?php echo json_encode($all_appointment_by_marital_cohabiting_defaulted) ?>;
+    var cohabitingLTFU = <?php echo json_encode($all_appointment_by_marital_cohabiting_lftu) ?>;
 
-        var unavailableMissed =  <?php echo json_encode($all_appointment_by_marital_unavailable_missed) ?>;
-        var unavailableDefaulted =  <?php echo json_encode($all_appointment_by_marital_unavailable_defaulted) ?>;
-        var unavailableLTFU =  <?php echo json_encode($all_appointment_by_marital_unavailable_lftu) ?>;
+    var unavailableMissed = <?php echo json_encode($all_appointment_by_marital_unavailable_missed) ?>;
+    var unavailableDefaulted = <?php echo json_encode($all_appointment_by_marital_unavailable_defaulted) ?>;
+    var unavailableLTFU = <?php echo json_encode($all_appointment_by_marital_unavailable_lftu) ?>;
 
-        var polygamousMissed =  <?php echo json_encode($all_appointment_by_marital_polygamous_missed) ?>;
-        var polygamousDefaulted =  <?php echo json_encode($all_appointment_by_marital_polygamous_defaulted) ?>;
-        var polygamousLTFU =  <?php echo json_encode($all_appointment_by_marital_polygamous_lftu) ?>;
+    var polygamousMissed = <?php echo json_encode($all_appointment_by_marital_polygamous_missed) ?>;
+    var polygamousDefaulted = <?php echo json_encode($all_appointment_by_marital_polygamous_defaulted) ?>;
+    var polygamousLTFU = <?php echo json_encode($all_appointment_by_marital_polygamous_lftu) ?>;
 
-        var notapplicableMissed =  <?php echo json_encode($all_appointment_by_marital_notapplicable_missed) ?>;
-        var notapplicableDefaulted =  <?php echo json_encode($all_appointment_by_marital_notapplicable_defaulted) ?>;
-        var notapplicableLTFU =  <?php echo json_encode($all_appointment_by_marital_notapplicable_lftu) ?>;
+    var notapplicableMissed = <?php echo json_encode($all_appointment_by_marital_notapplicable_missed) ?>;
+    var notapplicableDefaulted = <?php echo json_encode($all_appointment_by_marital_notapplicable_defaulted) ?>;
+    var notapplicableLTFU = <?php echo json_encode($all_appointment_by_marital_notapplicable_lftu) ?>;
 
-        Highcharts.chart('container', {
+    Highcharts.chart('container', {
         chart: {
             type: 'column'
         },
@@ -371,12 +370,12 @@ $(document).ready(function() {
     });
 
     var colors = Highcharts.getOptions().colors;
-    </script>
+</script>
 
 
 
 
 
-                <!-- end of col -->
+<!-- end of col -->
 
 @endsection

@@ -7,14 +7,14 @@
             <div></div>
         </div>
 
-        <img class="pl-3" src="{{ asset('assets/images/moh.png') }}" alt="ushauri">
+        <img class="pl-3" src="{{ asset('assets/images/logo2.png') }}" alt="ushauri">
 
 
 
     </div>
     <div class="header-part-center"">
 
-          <img class=" pl-3" src="{{ asset('assets/images/NASCOP_Logo.png') }}" alt="ushauri">
+          <img class=" pl-3" src="{{ asset('assets/images/logo2.png') }}" alt="ushauri">
 
     </div>
     <div class="header-part-right">

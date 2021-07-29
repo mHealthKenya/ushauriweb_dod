@@ -337,7 +337,7 @@
             $('#add_month6_div').show();
             $('#add_yearly_div').show();
             $('#add_status_div').show();
-        } else if ($(this).val() == "Partner") {
+        } else if ($(this).val() == "Service") {
             $('#rolenameDiv').show();
             $('#adddonorDiv').hide();
             $('#add_facility_div').hide();

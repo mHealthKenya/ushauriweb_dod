@@ -10,6 +10,8 @@ use App\Models\Language;
 use App\Models\Condition;
 use App\Models\Gender;
 use App\Models\Marital;
+use App\Models\Partner;
+use App\Models\Unit;
 use App\Models\Transit;
 use Session;
 use Auth;
@@ -22,9 +24,11 @@ class ClientController extends Controller
         $marital = Marital::all();
         $treatment = Condition::all();
         $grouping = Group::all();
+        $units = Unit::all();
         $clinics = Clinic::all();
+        $services = Partner::all();
         $language = Language::all()->where('status', '=', 'Active');
-        return view('clients.new_client', compact('gender', 'marital', 'clinics', 'treatment', 'language', 'grouping'));
+        return view('clients.new_client', compact('units', 'services', 'gender', 'marital', 'clinics', 'treatment', 'language', 'grouping'));
     }
     public function add_client(Request $request)
     {
@@ -43,11 +47,12 @@ class ClientController extends Controller
                 'smsenable' => 'required',
                 'motivational_enable' => 'required',
                 'txt_time' => 'required',
+                'partner_id' => 'required',
                 'status' => 'required',
                 'group_id' => 'required',
+                'unit_id' => 'required',
             ]);
             $new_client = new Client;
-
             // $validate_client = Client::where('clinic_number', $request->clinic_number)
             $new_client->clinic_number = $request->clinic_number;
             $new_client->f_name = $request->first_name;
@@ -67,6 +72,8 @@ class ClientController extends Controller
             $new_client->status = $request->status;
             $new_client->group_id = $request->group;
             $new_client->clinic_id = $request->clinic;
+            $new_client->partner_id = $request->service;
+            $new_client->unit_id = $request->unit;
 
             $validate_ccc = Client::where('clinic_number', $request->clinic_number)
                 ->first();
@@ -89,11 +96,11 @@ class ClientController extends Controller
             return back();
         }
     }
-    public function transit_client(Request $request){
+    public function transit_client(Request $request)
+    {
 
         $all_transit = Transit::all();
 
         return view('clients.transit_client', compact('all_transit'));
     }
-
 }

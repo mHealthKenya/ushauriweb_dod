@@ -191,19 +191,24 @@
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label for="add_partner_type">Service</label>
-                            <select class="form-control dynamic" data-dependant="rolename" data-width="100%" id="clinic" name="clinic">
+                            <select class="form-control dynamic" data-dependant="rolename" data-width="100%" id="service" name="service">
                                 <option value="">Please select </option>
-                                @if (count($clinics) > 0)
-                                @foreach($clinics as $clinic)
-                                <option value="{{$clinic->id }}">{{ ucwords($clinic->name) }}</option>
+                                @if (count($services) > 0)
+                                @foreach($services as $service)
+                                <option value="{{$clinic->id }}">{{ ucwords($service->name) }}</option>
                                 @endforeach
                                 @endif
                             </select>
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label for="add_partner_type">Units </label>
-                            <select class="form-control dynamic" data-dependant="rolename" data-width="100%" id="clinic" name="clinic">
+                            <select class="form-control dynamic" data-dependant="rolename" data-width="100%" id="unit" name="unit">
                                 <option value="">Please select </option>
+                                @if (count($units) > 0)
+                                @foreach($units as $unit)
+                                <option value="{{$clinic->id }}">{{ ucwords($unit->unit_name) }}</option>
+                                @endforeach
+                                @endif
 
                             </select>
                         </div>

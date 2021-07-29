@@ -28,17 +28,15 @@
             </div>
             <div class="col">
                 <div class="form-group">
-                    <select class="form-control county  input-rounded input-sm select2" id="counties" name="county">
-                        <option value="">Please select Unit:</option>
+                    <select class="form-control county  input-rounded input-sm select2" id="counties" name="county" searchable="Search here..">
+                        <option selected>Please select Unit:</option>
                         <option value=""></option>
                     </select>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <span class="filter_facility_wait" style="display: none;">Loading , Please Wait ...</span>
-
-                    <select class="form-control filter_facility input-rounded input-sm select2" id="facilities" name="facility">
+                    <select class="form-control filter_facility input-rounded input-sm select2" id="facilities" name="facility" data-live-search="true">
                         <option value="">Please select CCC Clinic : </option>
                         <option value=""></option>
                     </select>
@@ -240,10 +238,9 @@
                 $("#all_consented_clients").html(data.all_consented_clients);
                 $("#all_future_appointments").html(data.all_future_appointments);
                 $("#number_of_facilities").html(data.number_of_facilities);
-                chartData(data.consented_clients_count);
-                chartData(data.registered_clients_count);
-                //data.consented_clients_count;
-                //data.registered_clients_count;chartData
+                mainChart.series[0].setData([registered_clients_count]);
+                mainChart.series[1].setData([consented_clients_count]);
+
             }
         });
     });
@@ -259,7 +256,7 @@
 
     //console.log(Months);
 
-    Highcharts.chart('mainGraph', {
+    var mainChart = Highcharts.chart('mainGraph', {
         chart: {
             type: 'column'
         },
@@ -303,7 +300,6 @@
         }],
 
     });
-
 
 
     var colors = Highcharts.getOptions().colors;

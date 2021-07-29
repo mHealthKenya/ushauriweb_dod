@@ -179,7 +179,7 @@ Route::group(['middleware' => 'auth'], function () {
 
   // Units routes
   Route::get('/admin/units', ['uses' => 'App\Http\Controllers\UnitController@index', 'as' => 'admin-units']);
-  Route::post('/admin/add/units', ['uses' => 'App\Http\Controllers\addUnit@index', 'as' => 'add-units']);
-  Route::post('/admin/edit/units', ['uses' => 'App\Http\Controllers\editUnit@index', 'as' => 'edit-units']);
-  Route::post('/admin/delete/units', ['uses' => 'App\Http\Controllers\deleteUnit@index', 'as' => 'delete-units']);
+  Route::post('/admin/add/units', ['uses' => 'App\Http\Controllers\UnitController@addUnit', 'as' => 'add-units']);
+  Route::post('/admin/edit/units', ['uses' => 'App\Http\Controllers\UnitController@editUnit', 'as' => 'edit-units']);
+  Route::post('/admin/delete/units', ['uses' => 'App\Http\Controllers\UnitController@deleteUnit', 'as' => 'delete-units']);
 });
